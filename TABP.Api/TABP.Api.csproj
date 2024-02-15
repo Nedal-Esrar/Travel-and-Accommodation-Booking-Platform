@@ -6,17 +6,17 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>false</InvariantGlobalization>
     </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <DocumentationFile>bin\Debug\TAABB.Api.xml</DocumentationFile>
-    </PropertyGroup>
-
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <DocumentationFile>bin\Release\TAABB.Api.xml</DocumentationFile>
-    </PropertyGroup>
-
+    
     <PropertyGroup>
         <NoWarn>CS1591</NoWarn>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\TABP.Api.xml</DocumentationFile>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\TABP.Api.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

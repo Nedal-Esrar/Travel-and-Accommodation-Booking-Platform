@@ -24,5 +24,8 @@ public class RoomClassConfiguration : IEntityTypeConfiguration<RoomClass>
 
     builder.HasMany(rc => rc.Amenities)
       .WithMany(a => a.RoomClasses);
+    
+    builder.Property(rc => rc.PricePerNight)
+      .HasPrecision(18, 2);
   }
 }

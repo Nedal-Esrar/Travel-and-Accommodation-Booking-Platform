@@ -23,5 +23,14 @@ public class HotelConfiguration : IEntityTypeConfiguration<Hotel>
     builder.Ignore(h => h.Gallery);
     
     builder.Ignore(h => h.Thumbnail);
+    
+    builder.Property(h => h.ReviewsRating)
+      .HasPrecision(8, 6);
+
+    builder.Property(h => h.Longitude)
+      .HasPrecision(8, 6);
+
+    builder.Property(h => h.Latitude)
+      .HasPrecision(8, 6);
   }
 }

@@ -10,5 +10,7 @@ public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
   {
     builder.HasKey(d => d.Id);
     
+    builder.Property(d => d.Percentage)
+      .HasPrecision(18, 2);
   }
 }

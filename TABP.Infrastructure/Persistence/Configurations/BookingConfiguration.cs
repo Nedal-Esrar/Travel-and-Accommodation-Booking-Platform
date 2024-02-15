@@ -22,5 +22,8 @@ public class BookingConfiguration : IEntityTypeConfiguration<Booking>
     
     builder.Property(b => b.PaymentMethod)
       .HasConversion(new EnumToStringConverter<PaymentMethod>());
+    
+    builder.Property(b => b.TotalPrice)
+      .HasPrecision(18, 2);
   }
 }

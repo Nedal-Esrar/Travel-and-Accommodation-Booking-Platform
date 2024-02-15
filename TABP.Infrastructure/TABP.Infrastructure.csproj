@@ -6,4 +6,23 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="FirebaseStorage.net" Version="1.0.3"/>
+        <PackageReference Include="Google.Cloud.Storage.V1" Version="4.7.0"/>
+        <PackageReference Include="linq2db" Version="5.3.2" />
+        <PackageReference Include="linq2db.EntityFrameworkCore" Version="8.0.0" />
+        <PackageReference Include="MailKit" Version="4.3.0"/>
+        <PackageReference Include="MailKit.NET" Version="2.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4"/>
+        <PackageReference Include="MimeKit" Version="4.3.0"/>
+        <PackageReference Include="NReco.PdfGenerator" Version="1.2.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TABP.Application\TABP.Application.csproj" />
+    </ItemGroup>
+
 </Project>

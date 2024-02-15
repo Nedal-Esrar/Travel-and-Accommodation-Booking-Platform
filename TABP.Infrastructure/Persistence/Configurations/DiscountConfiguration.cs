@@ -12,5 +12,7 @@ public class DiscountConfiguration : IEntityTypeConfiguration<Discount>
     
     builder.Property(d => d.Percentage)
       .HasPrecision(18, 2);
+    
+    builder.HasIndex(d => new { d.StartDateUtc, d.EndDateUtc });
   }
 }

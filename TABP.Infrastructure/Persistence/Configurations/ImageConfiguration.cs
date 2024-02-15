@@ -14,5 +14,7 @@ public class ImageConfiguration : IEntityTypeConfiguration<Image>
 
     builder.Property(i => i.Type)
       .HasConversion(new EnumToStringConverter<ImageType>());
+    
+    builder.HasIndex(i => i.EntityId);
   }
 }

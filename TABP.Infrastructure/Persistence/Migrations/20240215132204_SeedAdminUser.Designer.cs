@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TABP.Infrastructure.Persistence.DbContexts;
 
@@ -11,9 +12,11 @@ using TABP.Infrastructure.Persistence.DbContexts;
 namespace TABP.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(HotelBookingDbContext))]
-    partial class HotelBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240215132204_SeedAdminUser")]
+    partial class SeedAdminUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,8 +111,6 @@ namespace TABP.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.HasIndex("CheckInDateUtc", "CheckOutDateUtc");
-
                     b.ToTable("Bookings");
                 });
 
@@ -168,8 +169,6 @@ namespace TABP.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("RoomClassId");
 
-                    b.HasIndex("StartDateUtc", "EndDateUtc");
-
                     b.ToTable("Discounts");
                 });
 
@@ -226,8 +225,6 @@ namespace TABP.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.HasIndex("StarRating");
-
                     b.ToTable("Hotels");
                 });
 
@@ -253,8 +250,6 @@ namespace TABP.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EntityId");
 
                     b.ToTable("Images");
                 });
@@ -444,17 +439,11 @@ namespace TABP.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("RoomType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("HotelId");
-
-                    b.HasIndex("PricePerNight");
-
-                    b.HasIndex("RoomType");
-
-                    b.HasIndex("AdultsCapacity", "ChildrenCapacity");
 
                     b.ToTable("RoomClasses");
                 });

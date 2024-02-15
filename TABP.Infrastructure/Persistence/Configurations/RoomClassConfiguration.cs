@@ -27,5 +27,11 @@ public class RoomClassConfiguration : IEntityTypeConfiguration<RoomClass>
     
     builder.Property(rc => rc.PricePerNight)
       .HasPrecision(18, 2);
+    
+    builder.HasIndex(rc => rc.RoomType);
+
+    builder.HasIndex(rc => new { rc.AdultsCapacity, rc.ChildrenCapacity });
+
+    builder.HasIndex(rc => rc.PricePerNight);
   }
 }

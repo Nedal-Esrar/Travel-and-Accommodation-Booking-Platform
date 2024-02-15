@@ -32,5 +32,7 @@ public class HotelConfiguration : IEntityTypeConfiguration<Hotel>
 
     builder.Property(h => h.Latitude)
       .HasPrecision(8, 6);
+    
+    builder.HasIndex(h => h.StarRating);
   }
 }

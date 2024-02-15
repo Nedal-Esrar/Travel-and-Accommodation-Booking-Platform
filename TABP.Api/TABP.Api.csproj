@@ -6,10 +6,44 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>false</InvariantGlobalization>
     </PropertyGroup>
+    
+    <PropertyGroup>
+        <NoWarn>CS1591</NoWarn>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>bin\Debug\TABP.Api.xml</DocumentationFile>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DocumentationFile>bin\Release\TABP.Api.xml</DocumentationFile>
+    </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1"/>
+        <PackageReference Include="Asp.Versioning.Mvc" Version="8.0.0"/>
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0"/>
+        <PackageReference Include="DateOnlyTimeOnly.AspNet" Version="2.1.1"/>
+        <PackageReference Include="DateOnlyTimeOnly.AspNet.Swashbuckle" Version="2.1.1"/>
+        <PackageReference Include="FluentValidation" Version="11.9.0"/>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0"/>
+        <PackageReference Include="MediatR" Version="12.2.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Serilog" Version="3.1.2-dev-02097"/>
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.1"/>
+        <PackageReference Include="Serilog.Exceptions" Version="8.4.0"/>
+        <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1"/>
+        <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00972"/>
+        <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" Version="1.4.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TABP.Application\TABP.Application.csproj" />
+      <ProjectReference Include="..\TABP.Infrastructure\TABP.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

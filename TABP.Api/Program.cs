@@ -1,21 +1,37 @@
+using Serilog;
+using TABP.Api;
+using TABP.Application;
+using TABP.Infrastructure;
+using TABP.Infrastructure.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Host.UseSerilog((context, configuration) => { configuration.ReadFrom.Configuration(context.Configuration); });
+
+builder.Services
+  .AddWebComponents()
+  .AddApplication()
+  .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-  app.UseSwagger();
-  app.UseSwaggerUI();
-}
+app.UseExceptionHandler();
+
+app.UseSwagger();
+
+app.UseSwaggerUI();
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
-app.MapControllers();
+app.Migrate();
+
+app.UseCors();
+
+app.UseRateLimiter();
+
+app.MapControllers()
+  .RequireRateLimiting("FixedWindow");
 
 app.Run();

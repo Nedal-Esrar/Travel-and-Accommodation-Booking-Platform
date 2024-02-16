@@ -266,7 +266,7 @@ Your Feedback and Contributions are Welcome!
 - **Code Contributions**: Contribute to the codebase.
 
 ### Contact and Support:
-Email: [nedalesrarahmad@gmail.com](nedalesrarahmad@gmail.com).
+Email: [nedalesrarahmad@gmail.com](mailto:nedalesrarahmad@gmail.com).
 
 GitHub: [Nedal-Esrar](https://github.com/Nedal-Esrar).
 

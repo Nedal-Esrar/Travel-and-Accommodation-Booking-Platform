@@ -139,6 +139,15 @@ This API provides a range of endpoints designed for the management of various ho
 | PUT    | /api/room-classes/{roomClassId}/rooms/{id} | Update an existing room with ID in a room class specified by ID |
 | DELETE | /api/room-classes/{roomClassId}/rooms/{id} | Delete a room by ID in a room class specified by ID |
 
+## Architecture
+- **Clean Architecture**
+  - **External Layers**: 
+    - Web: Controllers for handling requests and managing client-server communication.
+    - Infrastructure: Manages external resources such as databases, email service, PDF generation, image service, and auth management.
+  - **Core Layers**:
+    - Application Layer: Implements business logic and orchestrates interactions between components.
+    - Domain Layer: Contains fundamental business rules and entities, independent of external concerns like databases or user interfaces.
+
 ## Technology Stack Overview
 
 ### Technologies Used
@@ -180,15 +189,6 @@ This API provides a range of endpoints designed for the management of various ho
 
 - **HTTPS**: Ensures secure communication over the network.
 - **Data Encryption**: Password hashing using `Microsoft.AspNet.Identity.IPasswordHasher`.
-
-## Architecture
-- **Clean Architecture**
-  - **External Layers**: 
-    - Web: Controllers for handling requests and managing client-server communication.
-    - Infrastructure: Manages external resources such as databases, email service, PDF generation, image service, and auth management.
-  - **Core Layers**:
-    - Application Layer: Implements business logic and orchestrates interactions between components.
-    - Domain Layer: Contains fundamental business rules and entities, independent of external concerns like databases or user interfaces.
 
 ## API Versioning
 This API leverages the Asp.Versioning.Mvc library to implement a streamlined header-based versioning mechanism. This approach facilitates seamless client access to different API versions without requiring adjustments to the base URL or path. By utilizing headers, the versioning process is standardized and offers improved clarity and maintainability. This method also enhances flexibility and ease of integration for users while ensuring optimal compatibility with various client applications.
@@ -258,6 +258,10 @@ dotnet run
 The API will be accessable using https://localhost:7169.
 
 The swagger UI will open automatically where you can try and explore the endpoints or you can open it using https://localhost:7169/swagger.
+
+##### To access admin's functionalities, authenticate with these credentials:
+- **Email:** admin@hotelbooking.com
+- **Password:** 11aaAA@@
 
 ## Get Involved
 Your Feedback and Contributions are Welcome!

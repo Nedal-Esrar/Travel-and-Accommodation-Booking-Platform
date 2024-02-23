@@ -4,14 +4,16 @@ using TABP.Domain.Enums;
 
 namespace TABP.Application.RoomClasses.GetByHotelIdForGuest;
 
-public record RoomClassForGuestResponse(
-  Guid Id,
-  string Name,
-  int AdultsCapacity,
-  int ChildrenCapacity,
-  decimal PricePerNight,
-  string? Description,
-  RoomType RoomType,
-  IEnumerable<AmenityResponse> Amenities,
-  DiscountResponse? ActiveDiscount,
-  IEnumerable<string> GalleryUrls);
+public class RoomClassForGuestResponse
+{
+  public Guid Id { get; init; }
+  public string Name { get; init; }
+  public int AdultsCapacity { get; init; }
+  public int ChildrenCapacity { get; init; }
+  public decimal PricePerNight { get; init; }
+  public string? Description { get; init; }
+  public RoomType RoomType { get; init; }
+  public IEnumerable<AmenityResponse> Amenities { get; init; }
+  public DiscountResponse? ActiveDiscount { get; init; }
+  public IEnumerable<string> GalleryUrls { get; init; }
+}

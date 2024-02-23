@@ -1,7 +1,9 @@
 ﻿namespace TABP.Application.Cities.GetTrending;
 
-public record TrendingCityResponse(
-  Guid Id,
-  string Name,
-  string Country,
-  string? ThumbnailUrl);
+public class TrendingCityResponse
+{
+  public Guid Id { get; init; }
+  public string Name { get; init; }
+  public string Country { get; init; }
+  public string? ThumbnailUrl { get; init; }
+}

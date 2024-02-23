@@ -1,15 +1,17 @@
 ﻿namespace TABP.Application.Hotels.GetForGuestById;
 
-public record HotelForGuestResponse(
-  Guid Id,
-  string Name,
-  double Longitude,
-  double Latitude,
-  string CityName,
-  string CountryName,
-  int StarRating,
-  float ReviewsRating,
-  string? BriefDescription,
-  string? Description,
-  string? ThumbnailUrl,
-  IEnumerable<string> GalleryUrls);
+public class HotelForGuestResponse
+{
+  public Guid Id { get; init; }
+  public string Name { get; init; }
+  public double Longitude { get; init; }
+  public double Latitude { get; init; }
+  public string CityName { get; init; }
+  public string CountryName { get; init; }
+  public int StarRating { get; init; }
+  public float ReviewsRating { get; init; }
+  public string? BriefDescription { get; init; }
+  public string? Description { get; init; }
+  public string? ThumbnailUrl { get; init; }
+  public IEnumerable<string> GalleryUrls { get; init; }
+}

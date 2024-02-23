@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TABP.Application.Discounts.Create;
+using TABP.Application.Discounts.GetById;
 using TABP.Domain.Entities;
 using TABP.Domain.Models;
 
@@ -11,7 +12,7 @@ public class DiscountProfile : Profile
   {
     CreateMap<PaginatedList<Discount>, PaginatedList<Discount>>()
       .ForMember(dst => dst.Items, options => options.MapFrom(src => src.Items));
-    CreateMap<Discount, Discount>();
+    CreateMap<Discount, DiscountResponse>();
     CreateMap<CreateDiscountCommand, Discount>();
   }
 }

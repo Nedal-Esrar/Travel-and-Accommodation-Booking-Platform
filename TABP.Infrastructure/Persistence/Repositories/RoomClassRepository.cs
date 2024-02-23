@@ -17,7 +17,7 @@ public class RoomClassRepository(HotelBookingDbContext context) : IRoomClassRepo
   public async Task<RoomClass?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
   {
     return await context.RoomClasses
-      .SingleOrDefaultAsync(rc => rc.Id == id, cancellationToken);
+      .FirstOrDefaultAsync(rc => rc.Id == id, cancellationToken);
   }
 
   public async Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken = default)
@@ -102,7 +102,7 @@ public class RoomClassRepository(HotelBookingDbContext context) : IRoomClassRepo
     }
     else
     {
-      itemsToReturn = await queryable
+      itemsToReturn = await requestedPage
         .AsNoTracking()
         .ToListAsync(cancellationToken);
     }

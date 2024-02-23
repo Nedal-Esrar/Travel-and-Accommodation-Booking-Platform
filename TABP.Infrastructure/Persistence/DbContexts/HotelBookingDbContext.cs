@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
+using TABP.Infrastructure.Persistence.Configurations;
 
 namespace TABP.Infrastructure.Persistence.DbContexts;
 
@@ -21,6 +22,18 @@ public class HotelBookingDbContext(DbContextOptions<HotelBookingDbContext> optio
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    modelBuilder.ApplyConfiguration(new AmenityConfiguration());
+    modelBuilder.ApplyConfiguration(new BookingConfiguration());
+    modelBuilder.ApplyConfiguration(new CityConfiguration());
+    modelBuilder.ApplyConfiguration(new DiscountConfiguration());
+    modelBuilder.ApplyConfiguration(new HotelConfiguration());
+    modelBuilder.ApplyConfiguration(new ImageConfiguration());
+    modelBuilder.ApplyConfiguration(new InvoiceRecordConfiguration());
+    modelBuilder.ApplyConfiguration(new OwnerConfiguration());
+    modelBuilder.ApplyConfiguration(new ReviewConfiguration());
+    modelBuilder.ApplyConfiguration(new RoleConfiguration());
+    modelBuilder.ApplyConfiguration(new RoomClassConfiguration());
+    modelBuilder.ApplyConfiguration(new RoomConfiguration());
+    modelBuilder.ApplyConfiguration(new UserConfiguration());
   }
 }

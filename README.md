@@ -173,20 +173,22 @@ This API provides a range of endpoints designed for the management of various ho
 - **RESTful Principles**:  Adhering to RESTful design principles to ensure that APIs are designed for simplicity, scalability, and ease of use.
 - **Repository Pattern**:  Implementing the repository pattern to abstract the data layer, enhancing application maintainability, testability, and cleanliness by decoupling data access logic from business logic.
 - **Options Pattern**: For efficient configuration management within the application.
-
-### Architecture
-- **Clean Architecture**
-  - **External Layers**: 
-    - Web: Controllers for handling requests and managing client-server communication.
-    - Infrastructure: Manages external resources such as databases, email services, PDF generation, and identity management.
-  - **Core Layers**:
-     - Application Layer: Implements business logic and orchestrates interactions between components.
-    - Domain Layer: Contains fundamental business rules and entities, independent of external concerns like databases or user interfaces.
+- **Unit of Work**: Manages transactions across multiple data operations, ensuring atomicity and data consistency within a single logical unit.
+- **CQRS (Command Query Responsibility Segregation)**: Separates read and write operations, optimizing flexibility and scalability by using specialized models for queries and commands.
 
 ### Security
 
 - **HTTPS**: Ensures secure communication over the network.
 - **Data Encryption**: Password hashing using `Microsoft.AspNet.Identity.IPasswordHasher`.
+
+## Architecture
+- **Clean Architecture**
+  - **External Layers**: 
+    - Web: Controllers for handling requests and managing client-server communication.
+    - Infrastructure: Manages external resources such as databases, email service, PDF generation, image service, and auth management.
+  - **Core Layers**:
+    - Application Layer: Implements business logic and orchestrates interactions between components.
+    - Domain Layer: Contains fundamental business rules and entities, independent of external concerns like databases or user interfaces.
 
 ## API Versioning
 This API leverages the Asp.Versioning.Mvc library to implement a streamlined header-based versioning mechanism. This approach facilitates seamless client access to different API versions without requiring adjustments to the base URL or path. By utilizing headers, the versioning process is standardized and offers improved clarity and maintainability. This method also enhances flexibility and ease of integration for users while ensuring optimal compatibility with various client applications.

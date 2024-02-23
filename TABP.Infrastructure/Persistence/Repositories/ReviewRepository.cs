@@ -35,7 +35,7 @@ public class ReviewRepository(HotelBookingDbContext context) : IReviewRepository
     Guid reviewId, CancellationToken cancellationToken = default)
   {
     return await context.Reviews
-      .SingleOrDefaultAsync(r => r.Id == reviewId && r.HotelId == hotelId, cancellationToken);
+      .FirstOrDefaultAsync(r => r.Id == reviewId && r.HotelId == hotelId, cancellationToken);
   }
 
   public async Task<Review> CreateAsync(Review review, 
@@ -52,7 +52,7 @@ public class ReviewRepository(HotelBookingDbContext context) : IReviewRepository
     Guid guestId, CancellationToken cancellationToken = default)
   {
     return await context.Reviews
-      .SingleOrDefaultAsync(r => r.Id == reviewId && r.HotelId == hotelId && r.GuestId == guestId, 
+      .FirstOrDefaultAsync(r => r.Id == reviewId && r.HotelId == hotelId && r.GuestId == guestId, 
         cancellationToken);
   }
 

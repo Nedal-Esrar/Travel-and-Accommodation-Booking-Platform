@@ -61,7 +61,7 @@ public class BookingRepository(HotelBookingDbContext context) : IBookingReposito
       bookings.Include(b => b.Invoice);
     }
 
-    return await bookings.SingleOrDefaultAsync(cancellationToken);
+    return await bookings.FirstOrDefaultAsync(cancellationToken);
   }
 
   public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)

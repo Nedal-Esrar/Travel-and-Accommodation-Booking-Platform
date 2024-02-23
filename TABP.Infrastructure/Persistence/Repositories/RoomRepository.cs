@@ -47,7 +47,7 @@ public class RoomRepository(HotelBookingDbContext context) : IRoomRepository
   public async Task<Room?> GetByIdAsync(Guid roomClassId, Guid id, CancellationToken cancellationToken = default)
   {
     return await context.Rooms
-      .SingleOrDefaultAsync(r => r.Id == id && r.RoomClassId == roomClassId,
+      .FirstOrDefaultAsync(r => r.Id == id && r.RoomClassId == roomClassId,
         cancellationToken);
   }
 
@@ -129,7 +129,7 @@ public class RoomRepository(HotelBookingDbContext context) : IRoomRepository
     return await context.Rooms
       .Include(r => r.RoomClass)
       .ThenInclude(rc => rc.Discounts.Where(d => d.StartDateUtc <= currentDateTime && d.EndDateUtc > currentDateTime))
-      .SingleOrDefaultAsync(r => r.Id == roomId, cancellationToken);
+      .FirstOrDefaultAsync(r => r.Id == roomId, cancellationToken);
   }
 
   public async Task<bool> IsAvailableAsync(Guid id,
@@ -138,7 +138,7 @@ public class RoomRepository(HotelBookingDbContext context) : IRoomRepository
   {
     if (!await context.Rooms.AnyAsync(r => r.Id == id, cancellationToken))
     {
-      throw new Exception();
+      throw new NotFoundException(RoomMessages.NotFound);
     }
     
     return await context.Rooms

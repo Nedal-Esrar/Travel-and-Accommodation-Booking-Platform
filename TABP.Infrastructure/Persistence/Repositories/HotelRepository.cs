@@ -142,8 +142,6 @@ public class HotelRepository(HotelBookingDbContext context) : IHotelRepository
 
     var requestedPage = queryable.GetPage(
       query.PageNumber, query.PageSize);
-
-    // var itemsToReturn = await requestedPage.ToListAsync(cancellationToken);
     
     var itemsToReturn = (await requestedPage.Select(h => new
       {

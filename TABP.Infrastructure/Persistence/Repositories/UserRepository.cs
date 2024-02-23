@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
   {
     var user = await _context.Users
       .Include(u => u.Roles)
-      .SingleOrDefaultAsync(u => u.Email == email, cancellationToken);
+      .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
 
     if (user is null) return null;
 

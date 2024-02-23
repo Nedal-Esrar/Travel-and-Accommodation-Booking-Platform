@@ -10,6 +10,6 @@ public class RoleRepository(HotelBookingDbContext context) : IRoleRepository
   public async Task<Role?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
   {
     return await context.Roles
-      .SingleOrDefaultAsync(r => r.Name == name, cancellationToken);
+      .FirstOrDefaultAsync(r => r.Name == name, cancellationToken);
   }
 }

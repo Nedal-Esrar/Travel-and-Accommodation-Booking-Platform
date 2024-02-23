@@ -17,7 +17,7 @@ public class DiscountRepository(HotelBookingDbContext context) : IDiscountReposi
     CancellationToken cancellationToken = default)
   {
     return context.Discounts
-      .SingleOrDefaultAsync(d => d.Id == id && d.RoomClassId == roomClassId,
+      .FirstOrDefaultAsync(d => d.Id == id && d.RoomClassId == roomClassId,
         cancellationToken);
   }
 

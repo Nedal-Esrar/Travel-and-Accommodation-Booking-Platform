@@ -20,7 +20,7 @@ public class FirebaseImageService : IImageService
 
   public async Task<Image> StoreAsync(IFormFile image, CancellationToken cancellationToken = default)
   {
-    if (image is null || image.Length <= 0) throw new Exception();
+    if (image is null || image.Length <= 0) throw new ArgumentNullException();
 
     var imageFormat = image.ContentType.Split('/')[1];
 

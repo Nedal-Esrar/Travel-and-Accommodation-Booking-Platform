@@ -11,11 +11,11 @@ namespace TABP.Infrastructure.Persistence.Services.Images;
 public class FirebaseImageService : IImageService
 {
   private static readonly string[] AllowedImageFormats = [".jpg", ".jpeg", ".png"];
-  private readonly FireBaseConfig _fireBaseConfig;
+  private readonly FirebaseConfig _firebaseConfig;
 
-  public FirebaseImageService(IOptions<FireBaseConfig> fireBaseConfig)
+  public FirebaseImageService(IOptions<FirebaseConfig> fireBaseConfig)
   {
-    _fireBaseConfig = fireBaseConfig.Value;
+    _firebaseConfig = fireBaseConfig.Value;
   }
 
   public async Task<Image> StoreAsync(IFormFile image, CancellationToken cancellationToken = default)
@@ -26,7 +26,7 @@ public class FirebaseImageService : IImageService
 
     if (!IsAllowedImageFormat(imageFormat)) throw new ArgumentOutOfRangeException();
 
-    var credential = GoogleCredential.FromJson(_fireBaseConfig.Credentials);
+    var credential = GoogleCredential.FromJson(_firebaseConfig.CredentialsJson);
 
     var storage = await StorageClient.CreateAsync(credential);
 
@@ -35,7 +35,7 @@ public class FirebaseImageService : IImageService
     var destinationObjectName = $"{imageModel.Id}.{imageFormat}";
 
     await storage.UploadObjectAsync(
-      _fireBaseConfig.Bucket,
+      _firebaseConfig.Bucket,
       destinationObjectName,
       image.ContentType,
       image.OpenReadStream(),
@@ -51,7 +51,7 @@ public class FirebaseImageService : IImageService
   
   private async Task<string> GetImagePublicUrl(string destinationObjectName)
   {
-    var storage = new FirebaseStorage(_fireBaseConfig.Bucket);
+    var storage = new FirebaseStorage(_firebaseConfig.Bucket);
 
     var starsRef = storage.Child(destinationObjectName);
 
@@ -60,7 +60,7 @@ public class FirebaseImageService : IImageService
   
   public async Task DeleteAsync(Image image, CancellationToken cancellationToken = default)
   {
-    var storage = new FirebaseStorage(_fireBaseConfig.Bucket);
+    var storage = new FirebaseStorage(_firebaseConfig.Bucket);
 
     await storage.Child($"{image.Id}.{image.Format}").DeleteAsync();
   }

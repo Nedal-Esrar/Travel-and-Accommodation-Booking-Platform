@@ -72,7 +72,7 @@ public static class PersistenceConfiguration
   private static IServiceCollection AddImageService(
     this IServiceCollection services, IConfiguration configuration)
   {
-    services.Configure<FireBaseConfig>(configuration.GetSection(nameof(FireBaseConfig)));
+    services.Configure<FirebaseConfig>(configuration.GetSection(nameof(FirebaseConfig)));
     
     services.AddScoped<IImageService, FirebaseImageService>();
 

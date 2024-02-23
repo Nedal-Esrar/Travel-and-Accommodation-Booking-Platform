@@ -143,7 +143,7 @@ public class OwnersController(ISender mediator) : ControllerBase
       ownerUpdateRequest.Email,
       ownerUpdateRequest.PhoneNumber);
 
-    await mediator.Send(command);
+    await mediator.Send(command, cancellationToken);
 
     return NoContent();
   }

@@ -68,16 +68,6 @@ public static class PersistenceConfiguration
 
     return services;
   }
-
-  private static IServiceCollection AddImageService(
-    this IServiceCollection services, IConfiguration configuration)
-  {
-    services.Configure<FireBaseConfig>(configuration.GetSection(nameof(FireBaseConfig)));
-    
-    services.AddScoped<IImageService, FirebaseImageService>();
-
-    return services;
-  }
   
   public static IApplicationBuilder Migrate(this IApplicationBuilder app)
   {

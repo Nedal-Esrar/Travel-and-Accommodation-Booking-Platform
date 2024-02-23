@@ -1,9 +1,11 @@
 ﻿using System.Text;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using TABP.Domain.Interfaces.Auth;
+using TABP.Infrastructure.Common.OptionsValidation;
 
 namespace TABP.Infrastructure.Auth.Jwt;
 
@@ -12,6 +14,13 @@ public static class AuthConfiguration
   public static IServiceCollection AddAuthInfrastructure(
     this IServiceCollection services, IConfiguration configuration)
   {
+    services.AddScoped<IValidator<JwtAuthConfig>, JwtAuthConfigValidator>();
+
+    services.AddOptions<JwtAuthConfig>()
+      .BindConfiguration(nameof(JwtAuthConfig))
+      .ValidateFluentValidation()
+      .ValidateOnStart();
+    
     services.AddAuthentication(options =>
     {
       options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -35,8 +44,6 @@ public static class AuthConfiguration
         ClockSkew = TimeSpan.Zero
       };
     });
-    
-    services.Configure<JwtAuthConfig>(configuration.GetSection(nameof(JwtAuthConfig)));
 
     services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 

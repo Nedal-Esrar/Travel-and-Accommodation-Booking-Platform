@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="FirebaseStorage.net" Version="1.0.3"/>
+        <PackageReference Include="FluentValidation" Version="11.9.0" />
         <PackageReference Include="Google.Cloud.Storage.V1" Version="4.7.0"/>
         <PackageReference Include="linq2db" Version="5.3.2" />
         <PackageReference Include="linq2db.EntityFrameworkCore" Version="8.0.0" />

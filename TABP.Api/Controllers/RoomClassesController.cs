@@ -88,7 +88,7 @@ public class RoomClassesController(ISender mediator) : ControllerBase
       roomClassCreationRequest.HotelId,
       roomClassCreationRequest.Name,
       roomClassCreationRequest.Description,
-      roomClassCreationRequest.AdultCapacity,
+      roomClassCreationRequest.AdultsCapacity,
       roomClassCreationRequest.ChildrenCapacity,
       roomClassCreationRequest.PricePerNight,
       roomClassCreationRequest.AmenitiesIds ?? Enumerable.Empty<Guid>());

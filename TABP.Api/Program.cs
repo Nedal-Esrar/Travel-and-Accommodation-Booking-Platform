@@ -27,7 +27,9 @@ app.UseHttpsRedirection();
 
 app.Migrate();
 
-app.UseCors();
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseRateLimiter();
 

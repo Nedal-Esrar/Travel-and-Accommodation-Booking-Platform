@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using TABP.Api.Dtos.Cities;
 using TABP.Application.Extensions.Validation;
+using static TABP.Domain.Constants.Common;
+using static TABP.Domain.Constants.City;
 
 namespace TABP.Api.Validators.Cities;
 
@@ -10,14 +12,14 @@ public class CityUpdateRequestValidator : AbstractValidator<CityUpdateRequest>
   {
     RuleFor(c => c.Name)
       .NotEmpty()
-      .ValidName(3, 30);
+      .ValidName(MinNameLength, MaxNameLength);
 
     RuleFor(c => c.Country)
       .NotEmpty()
-      .ValidName(3, 30);
+      .ValidName(MinNameLength, MaxNameLength);
 
     RuleFor(c => c.PostOffice)
       .NotEmpty()
-      .ValidNumericString(5);
+      .ValidNumericString(PostOfficeLength);
   }
 }

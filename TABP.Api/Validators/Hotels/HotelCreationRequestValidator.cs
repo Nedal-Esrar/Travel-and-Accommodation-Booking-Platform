@@ -1,6 +1,9 @@
 ﻿using FluentValidation;
 using TABP.Api.Dtos.Hotels;
 using TABP.Application.Extensions.Validation;
+using static TABP.Domain.Constants.Common;
+using static TABP.Domain.Constants.Hotel;
+using static TABP.Domain.Constants.Location;
 
 namespace TABP.Api.Validators.Hotels;
 
@@ -16,25 +19,25 @@ public class HotelCreationRequestValidator : AbstractValidator<HotelCreationRequ
 
     RuleFor(x => x.Name)
       .NotEmpty()
-      .ValidName(3, 30);
+      .ValidName(MinNameLength, MaxNameLength);
 
     RuleFor(x => x.StarRating)
       .NotEmpty()
-      .InclusiveBetween(1, 5);
+      .InclusiveBetween(MinStarRating, MaxStarRating);
 
     RuleFor(x => x.Longitude)
       .NotEmpty()
-      .InclusiveBetween(-90, 90);
+      .InclusiveBetween(MinLongitude, MaxLongitude);
 
     RuleFor(x => x.Latitude)
       .NotEmpty()
-      .InclusiveBetween(-180, 180);
+      .InclusiveBetween(MinLatitude, MaxLatitude);
 
     RuleFor(x => x.BriefDescription)
-      .MaximumLength(100);
+      .MaximumLength(ShortTextMaxLength);
 
     RuleFor(x => x.Description)
-      .MaximumLength(100);
+      .MaximumLength(TextMaxLength);
 
     RuleFor(x => x.PhoneNumber)
       .NotEmpty()

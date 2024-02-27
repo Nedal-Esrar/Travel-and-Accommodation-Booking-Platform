@@ -23,7 +23,7 @@ public static class ValidationExtensions
     this IRuleBuilder<T, string> ruleBuilder, int minLength, int maxLength)
   {
     return ruleBuilder
-      .Matches(@"^[A-Za-z\s]+$")
+      .Matches(@"^[A-Za-z(),\-\s]+$")
       .WithMessage(ValidationMessages.NameIsNotValid)
       .Length(minLength, maxLength);
   }

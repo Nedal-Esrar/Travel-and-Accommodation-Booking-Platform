@@ -174,7 +174,7 @@ public class HotelsController(ISender mediator) : ControllerBase
   [AllowAnonymous]
   public async Task<ActionResult<IEnumerable<RoomClassForGuestResponse>>> GetRoomClassesForGuests(
     Guid id,
-    GetRoomClassesForGuestRequest getRoomClassesForGuestRequest,
+    [FromQuery] GetRoomClassesForGuestRequest getRoomClassesForGuestRequest,
     CancellationToken cancellationToken = default)
   {
     var query = new GetRoomClassesByHotelIdForGuestQuery(

@@ -4,7 +4,7 @@ public record RoomClassCreationRequest(
   Guid HotelId,
   string Name,
   string? Description,
-  int AdultCapacity,
+  int AdultsCapacity,
   int ChildrenCapacity,
   decimal PricePerNight,
   IEnumerable<Guid>? AmenitiesIds);

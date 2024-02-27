@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using TABP.Api.Dtos.Common;
+using static TABP.Domain.Constants.Common;
 
 namespace TABP.Api.Validators.Common;
 
@@ -8,7 +9,7 @@ public class ResourcesQueryRequestValidator : AbstractValidator<ResourcesQueryRe
   public ResourcesQueryRequestValidator()
   {
     RuleFor(x => x.SearchTerm)
-      .MaximumLength(100);
+      .MaximumLength(ShortTextMaxLength);
 
     RuleFor(x => x.SortOrder)
       .Must(BeAValidSortOrder)

@@ -99,6 +99,8 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
 
         createdBooking.Invoice.Add(invoiceRecord);
       }
+      
+      await _unitOfWork.SaveChangesAsync(cancellationToken);
 
       var invoicePdf = await _pdfService.GeneratePdfFromHtmlAsync(
         GetInvoiceHtml(createdBooking),
@@ -109,8 +111,6 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
           guest.Email,
           new[] { ("invoice.pdf", invoicePdf) }
         ), cancellationToken);
-
-      await _unitOfWork.SaveChangesAsync(cancellationToken);
 
       await _unitOfWork.CommitTransactionAsync(cancellationToken);
 

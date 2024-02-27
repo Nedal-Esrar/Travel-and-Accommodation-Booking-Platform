@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using TABP.Api.Dtos.RoomClasses;
 using TABP.Application.Extensions.Validation;
+using static TABP.Domain.Constants.Common;
+using static TABP.Domain.Constants.RoomClass;
 
 namespace TABP.Api.Validators.RoomClasses;
 
@@ -10,21 +12,21 @@ public class RoomClassUpdateRequestValidator : AbstractValidator<RoomClassUpdate
   {
     RuleFor(x => x.Name)
       .NotEmpty()
-      .ValidName(3, 30);
+      .ValidName(MinNameLength, MaxNameLength);
 
     RuleFor(x => x.Description)
-      .MaximumLength(100);
+      .MaximumLength(ShortTextMaxLength);
 
     RuleFor(x => x.AdultsCapacity)
       .NotEmpty()
-      .GreaterThan(0);
+      .InclusiveBetween(MinAdultsCapacity, MaxAdultsCapacity);
 
     RuleFor(x => x.ChildrenCapacity)
-      .NotEmpty()
-      .GreaterThanOrEqualTo(0);
+      .NotNull()
+      .InclusiveBetween(MinChildrenCapacity, MaxChildrenCapacity);
 
     RuleFor(x => x.PricePerNight)
       .NotEmpty()
-      .GreaterThan(0);
+      .GreaterThan(Zero);
   }
 }

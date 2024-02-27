@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using TABP.Api.Dtos.Discounts;
+using static TABP.Domain.Constants.Discounts;
 
 namespace TABP.Api.Validators.Discounts;
 
@@ -9,8 +10,8 @@ public class DiscountCreationRequestValidator : AbstractValidator<DiscountCreati
   {
     RuleFor(x => x.Percentage)
       .NotEmpty()
-      .GreaterThan(0)
-      .LessThanOrEqualTo(100);
+      .GreaterThan(MinDiscountPercentage)
+      .LessThanOrEqualTo(MaxDiscountPercentage);
 
     RuleFor(x => x.StartDateUtc)
       .NotEmpty()

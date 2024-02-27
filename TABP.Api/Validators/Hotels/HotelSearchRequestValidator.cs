@@ -1,6 +1,9 @@
 ﻿using FluentValidation;
 using TABP.Api.Dtos.Hotels;
 using TABP.Api.Validators.Common;
+using static TABP.Domain.Constants.RoomClass;
+using static TABP.Domain.Constants.Common;
+using static TABP.Domain.Constants.Hotel;
 
 namespace TABP.Api.Validators.Hotels;
 
@@ -20,27 +23,27 @@ public class HotelSearchRequestValidator : AbstractValidator<HotelSearchRequest>
 
     RuleFor(x => x.NumberOfAdults)
       .NotEmpty()
-      .GreaterThanOrEqualTo(1);
+      .GreaterThanOrEqualTo(MinAdultsCapacity);
 
     RuleFor(x => x.NumberOfChildren)
-      .NotEmpty()
-      .GreaterThanOrEqualTo(0);
+      .NotNull()
+      .GreaterThanOrEqualTo(MinChildrenCapacity);
 
     RuleFor(x => x.NumberOfRooms)
       .NotEmpty()
-      .GreaterThanOrEqualTo(1);
+      .GreaterThan(Zero);
 
     When(x => x.MinStarRating is not null, () =>
     {
       RuleFor(x => x.MinStarRating)
-        .InclusiveBetween(1, 5);
+        .InclusiveBetween(MinStarRating, MaxStarRating);
     });
 
     RuleFor(x => x.MinPrice)
-      .GreaterThan(0);
+      .GreaterThan(Zero);
 
     RuleFor(x => x.MaxPrice)
-      .GreaterThan(x => x.MinPrice ?? 0);
+      .GreaterThan(x => x.MinPrice ?? Zero);
 
     When(x => x.RoomTypes is not null, () =>
     {

@@ -1,6 +1,7 @@
 using FluentValidation;
 using TABP.Api.Dtos.Owners;
 using TABP.Application.Extensions.Validation;
+using static TABP.Domain.Constants.Common;
 
 namespace TABP.Api.Validators.Owners;
 
@@ -8,13 +9,13 @@ public class OwnerUpdateCommandValidator : AbstractValidator<OwnerUpdateRequest>
 {
   public OwnerUpdateCommandValidator()
   {
-    RuleFor(x => x.FirstName)
+    RuleFor(c => c.FirstName)
       .NotEmpty()
-      .ValidName(3, 30);
+      .ValidName(MinNameLength, MaxNameLength);
 
     RuleFor(x => x.LastName)
       .NotEmpty()
-      .ValidName(3, 30);
+      .ValidName(MinNameLength, MaxNameLength);
 
     RuleFor(x => x.PhoneNumber)
       .NotEmpty()

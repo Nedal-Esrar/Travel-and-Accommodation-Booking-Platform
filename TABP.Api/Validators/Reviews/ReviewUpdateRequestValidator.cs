@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using TABP.Api.Dtos.Reviews;
+using static TABP.Domain.Constants.Common;
+using static TABP.Domain.Constants.Review;
 
 namespace TABP.Api.Validators.Reviews;
 
@@ -9,10 +11,10 @@ public class ReviewUpdateRequestValidator : AbstractValidator<ReviewUpdateReques
   {
     RuleFor(x => x.Content)
       .NotEmpty()
-      .MaximumLength(200);
+      .MaximumLength(TextMaxLength);
 
     RuleFor(x => x.Rating)
       .NotEmpty()
-      .InclusiveBetween(0, 10);
+      .InclusiveBetween(MinReviewRating, MaxReviewRating);
   }
 }

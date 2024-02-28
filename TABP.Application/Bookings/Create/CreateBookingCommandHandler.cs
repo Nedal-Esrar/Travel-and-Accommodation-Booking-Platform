@@ -59,21 +59,22 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
                   cancellationToken)
                 ?? throw new NotFoundException(HotelMessages.NotFound);
 
-    var rooms = await ValidateRooms(
-      request.RoomIds,
-      request.HotelId,
-      request.CheckInDateUtc,
-      request.CheckOutDateUtc,
-      cancellationToken);
-
     await _unitOfWork.BeginTransactionAsync(cancellationToken);
 
     try
     {
+      var rooms = await ValidateRooms(
+        request.RoomIds,
+        request.HotelId,
+        request.CheckInDateUtc,
+        request.CheckOutDateUtc,
+        cancellationToken);
+      
       var booking = new Booking
       {
         Hotel = hotel,
         Rooms = rooms,
+        Guest = guest,
         CheckInDateUtc = request.CheckInDateUtc,
         CheckOutDateUtc = request.CheckOutDateUtc,
         TotalPrice = CalculateTotalPrice(rooms,

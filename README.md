@@ -192,7 +192,6 @@ This API provides a range of endpoints designed for the management of various ho
 
 ## API Versioning
 This API leverages the Asp.Versioning.Mvc library to implement a streamlined header-based versioning mechanism. This approach facilitates seamless client access to different API versions without requiring adjustments to the base URL or path. By utilizing headers, the versioning process is standardized and offers improved clarity and maintainability. This method also enhances flexibility and ease of integration for users while ensuring optimal compatibility with various client applications.
-curl?
 This API uses Asp.Versioning.Mvc for header-based versioning, allowing seamless access to different versions without changing the URL. It standardizes versioning via headers, improving clarity and flexibility for users and compatibility with client apps.
 
 Users can effortlessly specify their preferred API version by including the x-api-version header in their requests. In instances where no version is explicitly specified, the API seamlessly defaults to the latest available version. For instance:

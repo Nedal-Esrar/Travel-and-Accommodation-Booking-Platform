@@ -1,7 +1,7 @@
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TAABB.Application.Users.Login;
 using TABP.Api.Dtos.Auth;
 using TABP.Application.Users.Login;
 using TABP.Application.Users.Register;
@@ -12,7 +12,7 @@ namespace TABP.Api.Controllers;
 [Route("api/auth")]
 [ApiController]
 [ApiVersion("1.0")]
-public class AuthController(ISender mediator) : ControllerBase
+public class AuthController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Processes a login request.
@@ -31,9 +31,7 @@ public class AuthController(ISender mediator) : ControllerBase
     LoginRequest loginRequest,
     CancellationToken cancellationToken)
   {
-    var loginCommand = new LoginCommand(
-      loginRequest.Email,
-      loginRequest.Password);
+    var loginCommand = mapper.Map<LoginCommand>(loginRequest);
 
     return Ok(await mediator.Send(loginCommand, cancellationToken));
   }
@@ -54,15 +52,11 @@ public class AuthController(ISender mediator) : ControllerBase
     RegisterRequest registerRequest,
     CancellationToken cancellationToken)
   {
-    var registerCommand = new RegisterCommand(
-      registerRequest.FirstName,
-      registerRequest.LastName,
-      registerRequest.Email,
-      registerRequest.Password,
-      UserRoles.Guest);
-
+    var registerCommand = new RegisterCommand { Role = UserRoles.Guest };
+    mapper.Map(registerRequest, registerCommand);
+  
     await mediator.Send(registerCommand, cancellationToken);
-
+  
     return NoContent();
   }
 }

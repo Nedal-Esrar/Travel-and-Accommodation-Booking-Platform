@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace TABP.Api.Controllers;
 [ApiController]
 [Route("api/amenities")]
 [ApiVersion("1.0")]
-public class AmenitiesController(ISender mediator) : ControllerBase
+public class AmenitiesController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Retrieve a page of amenities based on the provided parameters.
@@ -34,19 +35,7 @@ public class AmenitiesController(ISender mediator) : ControllerBase
     [FromQuery] AmenitiesGetRequest amenitiesGetRequest,
     CancellationToken cancellationToken)
   {
-    var sortOrder = amenitiesGetRequest.SortOrder switch
-    {
-      "asc" => SortOrder.Ascending,
-      "desc" => SortOrder.Descending,
-      _ => (SortOrder?)null
-    };
-
-    var query = new GetAmenitiesQuery(
-      amenitiesGetRequest.SearchTerm,
-      sortOrder,
-      amenitiesGetRequest.SortColumn,
-      amenitiesGetRequest.PageNumber,
-      amenitiesGetRequest.PageSize);
+    var query = mapper.Map<GetAmenitiesQuery>(amenitiesGetRequest);
 
     var amenities = await mediator.Send(query, cancellationToken);
 
@@ -70,7 +59,7 @@ public class AmenitiesController(ISender mediator) : ControllerBase
   public async Task<ActionResult<AmenityResponse>> GetAmenity(
     Guid id, CancellationToken cancellationToken)
   {
-    var query = new GetAmenityByIdQuery(id);
+    var query = new GetAmenityByIdQuery { AmenityId = id };
 
     var amenity = await mediator.Send(query, cancellationToken);
 
@@ -99,13 +88,9 @@ public class AmenitiesController(ISender mediator) : ControllerBase
     AmenityCreationRequest amenityCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new CreateAmenityCommand(
-      amenityCreationRequest.Name,
-      amenityCreationRequest.Description);
+    var command = mapper.Map<CreateAmenityCommand>(amenityCreationRequest);
 
-    var createdAmenity = await mediator.Send(
-      command,
-      cancellationToken);
+    var createdAmenity = await mediator.Send(command, cancellationToken);
 
     return CreatedAtAction(nameof(GetAmenity), new { id = createdAmenity.Id }, createdAmenity);
   }
@@ -134,10 +119,9 @@ public class AmenitiesController(ISender mediator) : ControllerBase
     AmenityUpdateRequest amenityUpdateRequest,
     CancellationToken cancellationToken)
   {
-    var command = new UpdateAmenityCommand(id,
-      amenityUpdateRequest.Name,
-      amenityUpdateRequest.Description);
-
+    var command = new UpdateAmenityCommand { AmenityId = id };
+    mapper.Map(amenityUpdateRequest, command);
+    
     await mediator.Send(command, cancellationToken);
 
     return NoContent();

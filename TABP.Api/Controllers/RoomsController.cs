@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace TABP.Api.Controllers;
 [Route("api/room-classes/{roomClassId:guid}/rooms")]
 [ApiVersion("1.0")]
 [Authorize(Roles = UserRoles.Admin)]
-public class RoomsController(ISender mediator) : ControllerBase
+public class RoomsController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Retrieve a page of rooms for a room class based on the provided parameters for management (admin).
@@ -43,27 +44,15 @@ public class RoomsController(ISender mediator) : ControllerBase
     [FromQuery] RoomsGetRequest roomsGetRequest,
     CancellationToken cancellationToken)
   {
-    var sortOrder = roomsGetRequest.SortOrder switch
-    {
-      "asc" => SortOrder.Ascending,
-      "desc" => SortOrder.Descending,
-      _ => (SortOrder?)null
-    };
+    var query = new GetRoomsForManagementQuery { RoomClassId = roomClassId };
+    mapper.Map(roomsGetRequest, query);
 
-    var query = new GetRoomsForManagementQuery(
-      roomClassId,
-      roomsGetRequest.SearchTerm,
-      sortOrder,
-      roomsGetRequest.SortColumn,
-      roomsGetRequest.PageNumber,
-      roomsGetRequest.PageSize);
-
-    var owners = await mediator.Send(query, cancellationToken);
+    var rooms = await mediator.Send(query, cancellationToken);
 
     Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      owners.PaginationMetadata);
+      rooms.PaginationMetadata);
 
-    return Ok(owners.Items);
+    return Ok(rooms.Items);
   }
 
   /// <summary>
@@ -86,19 +75,15 @@ public class RoomsController(ISender mediator) : ControllerBase
     [FromQuery] RoomsForGuestsGetRequest roomsForGuestsGetRequest,
     CancellationToken cancellationToken)
   {
-    var query = new GetRoomsByRoomClassIdForGuestsQuery(
-      roomClassId,
-      roomsForGuestsGetRequest.CheckInDateUtc,
-      roomsForGuestsGetRequest.CheckOutDateUtc,
-      roomsForGuestsGetRequest.PageNumber,
-      roomsForGuestsGetRequest.PageSize);
+    var query = new GetRoomsByRoomClassIdForGuestsQuery { RoomClassId = roomClassId };
+    mapper.Map(roomsForGuestsGetRequest, query);
 
-    var owners = await mediator.Send(query, cancellationToken);
+    var rooms = await mediator.Send(query, cancellationToken);
 
     Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      owners.PaginationMetadata);
+      rooms.PaginationMetadata);
 
-    return Ok(owners.Items);
+    return Ok(rooms.Items);
   }
 
   /// <summary>
@@ -125,13 +110,10 @@ public class RoomsController(ISender mediator) : ControllerBase
     RoomCreationRequest roomCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new CreateRoomCommand(
-      roomClassId,
-      roomCreationRequest.Number);
+    var command = new CreateRoomCommand { RoomClassId = roomClassId };
+    mapper.Map(roomCreationRequest, command);
 
-    await mediator.Send(
-      command,
-      cancellationToken);
+    await mediator.Send(command, cancellationToken);
 
     return Created();
   }
@@ -161,13 +143,14 @@ public class RoomsController(ISender mediator) : ControllerBase
     RoomUpdateRequest roomUpdateRequest,
     CancellationToken cancellationToken)
   {
-    var command = new UpdateRoomCommand(
-      id, roomClassId,
-      roomUpdateRequest.Number);
+    var command = new UpdateRoomCommand
+    {
+      RoomClassId = roomClassId,
+      RoomId = id
+    };
+    mapper.Map(roomUpdateRequest, command);
 
-    await mediator.Send(
-      command,
-      cancellationToken);
+    await mediator.Send(command, cancellationToken);
 
     return NoContent();
   }
@@ -193,7 +176,11 @@ public class RoomsController(ISender mediator) : ControllerBase
     Guid id,
     CancellationToken cancellationToken = default)
   {
-    var command = new DeleteRoomCommand(roomClassId, id);
+    var command = new DeleteRoomCommand
+    {
+      RoomClassId = roomClassId,
+      RoomId = id
+    };
 
     await mediator.Send(command, cancellationToken);
 

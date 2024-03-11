@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,6 @@ using TABP.Application.Hotels.SetThumbnail;
 using TABP.Application.Hotels.Update;
 using TABP.Application.RoomClasses.GetByHotelIdForGuest;
 using TABP.Domain;
-using TABP.Domain.Enums;
 
 namespace TABP.Api.Controllers;
 
@@ -25,7 +25,7 @@ namespace TABP.Api.Controllers;
 [Route("api/hotels")]
 [ApiVersion("1.0")]
 [Authorize(Roles = UserRoles.Admin)]
-public class HotelsController(ISender mediator) : ControllerBase
+public class HotelsController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Retrieve a page of hotels based on the provided parameters for management (admin).
@@ -44,26 +44,14 @@ public class HotelsController(ISender mediator) : ControllerBase
     [FromQuery] HotelsGetRequest hotelsGetRequest,
     CancellationToken cancellationToken)
   {
-    var sortOrder = hotelsGetRequest.SortOrder switch
-    {
-      "asc" => SortOrder.Ascending,
-      "desc" => SortOrder.Descending,
-      _ => (SortOrder?)null
-    };
+    var query = mapper.Map<GetHotelsForManagementQuery>(hotelsGetRequest);
 
-    var query = new GetHotelsForManagementQuery(
-      hotelsGetRequest.SearchTerm,
-      sortOrder,
-      hotelsGetRequest.SortColumn,
-      hotelsGetRequest.PageNumber,
-      hotelsGetRequest.PageSize);
-
-    var owners = await mediator.Send(query, cancellationToken);
+    var hotels = await mediator.Send(query, cancellationToken);
 
     Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      owners.PaginationMetadata);
+      hotels.PaginationMetadata);
 
-    return Ok(owners.Items);
+    return Ok(hotels.Items);
   }
 
   /// <summary>
@@ -82,29 +70,7 @@ public class HotelsController(ISender mediator) : ControllerBase
     [FromQuery] HotelSearchRequest hotelSearchRequest,
     CancellationToken cancellationToken = default)
   {
-    var sortOrder = hotelSearchRequest.SortOrder switch
-    {
-      "asc" => SortOrder.Ascending,
-      "desc" => SortOrder.Descending,
-      _ => (SortOrder?)null
-    };
-
-    var query = new SearchForHotelsQuery(
-      hotelSearchRequest.SearchTerm,
-      sortOrder,
-      hotelSearchRequest.SortColumn,
-      hotelSearchRequest.PageNumber,
-      hotelSearchRequest.PageSize,
-      hotelSearchRequest.CheckInDateUtc,
-      hotelSearchRequest.CheckOutDateUtc,
-      hotelSearchRequest.NumberOfAdults,
-      hotelSearchRequest.NumberOfChildren,
-      hotelSearchRequest.NumberOfRooms,
-      hotelSearchRequest.MinPrice,
-      hotelSearchRequest.MaxPrice,
-      hotelSearchRequest.MinStarRating,
-      hotelSearchRequest.RoomTypes ?? Enumerable.Empty<RoomType>(),
-      hotelSearchRequest.Amenities ?? Enumerable.Empty<Guid>());
+    var query = mapper.Map<SearchForHotelsQuery>(hotelSearchRequest);
 
     var hotels = await mediator.Send(query, cancellationToken);
 
@@ -130,7 +96,7 @@ public class HotelsController(ISender mediator) : ControllerBase
     [FromQuery] HotelFeaturedDealsGetRequest hotelFeaturedDealsGetRequest,
     CancellationToken cancellationToken = default)
   {
-    var query = new GetHotelFeaturedDealsQuery(hotelFeaturedDealsGetRequest.Count);
+    var query = mapper.Map<GetHotelFeaturedDealsQuery>(hotelFeaturedDealsGetRequest);
 
     var featuredDeals = await mediator.Send(query, cancellationToken);
 
@@ -152,7 +118,7 @@ public class HotelsController(ISender mediator) : ControllerBase
   public async Task<ActionResult<HotelForGuestResponse>> GetHotelForGuest(Guid id,
     CancellationToken cancellationToken = default)
   {
-    var query = new GetHotelForGuestByIdQuery(id);
+    var query = new GetHotelForGuestByIdQuery { HotelId = id };
 
     var hotel = await mediator.Send(query, cancellationToken);
 
@@ -177,10 +143,8 @@ public class HotelsController(ISender mediator) : ControllerBase
     [FromQuery] GetRoomClassesForGuestRequest getRoomClassesForGuestRequest,
     CancellationToken cancellationToken = default)
   {
-    var query = new GetRoomClassesByHotelIdForGuestQuery(
-      id,
-      getRoomClassesForGuestRequest.PageNumber,
-      getRoomClassesForGuestRequest.PageSize);
+    var query = new GetRoomClassesByHotelIdForGuestQuery { HotelId = id };
+    mapper.Map(getRoomClassesForGuestRequest, query);
 
     var roomClasses = await mediator.Send(query, cancellationToken);
 
@@ -210,20 +174,9 @@ public class HotelsController(ISender mediator) : ControllerBase
     HotelCreationRequest hotelCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new CreateHotelCommand(
-      hotelCreationRequest.CityId,
-      hotelCreationRequest.OwnerId,
-      hotelCreationRequest.Name,
-      hotelCreationRequest.StarRating,
-      hotelCreationRequest.Longitude,
-      hotelCreationRequest.Latitude,
-      hotelCreationRequest.BriefDescription,
-      hotelCreationRequest.Description,
-      hotelCreationRequest.PhoneNumber);
+    var command = mapper.Map<CreateHotelCommand>(hotelCreationRequest);
 
-    await mediator.Send(
-      command,
-      cancellationToken);
+    await mediator.Send(command, cancellationToken);
 
     return Created();
   }
@@ -252,21 +205,10 @@ public class HotelsController(ISender mediator) : ControllerBase
     HotelUpdateRequest hotelUpdateRequest,
     CancellationToken cancellationToken)
   {
-    var command = new UpdateHotelCommand(
-      id,
-      hotelUpdateRequest.CityId,
-      hotelUpdateRequest.OwnerId,
-      hotelUpdateRequest.Name,
-      hotelUpdateRequest.StarRating,
-      hotelUpdateRequest.Longitude,
-      hotelUpdateRequest.Latitude,
-      hotelUpdateRequest.BriefDescription,
-      hotelUpdateRequest.Description,
-      hotelUpdateRequest.PhoneNumber);
+    var command = new UpdateHotelCommand { HotelId = id };
+    mapper.Map(hotelUpdateRequest, command);
 
-    await mediator.Send(
-      command,
-      cancellationToken);
+    await mediator.Send(command, cancellationToken);
 
     return NoContent();
   }
@@ -291,7 +233,7 @@ public class HotelsController(ISender mediator) : ControllerBase
     Guid id,
     CancellationToken cancellationToken)
   {
-    var command = new DeleteHotelCommand(id);
+    var command = new DeleteHotelCommand { HotelId = id };
 
     await mediator.Send(
       command,
@@ -322,9 +264,9 @@ public class HotelsController(ISender mediator) : ControllerBase
     [FromForm] ImageCreationRequest imageCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new SetHotelThumbnailCommand(id,
-      imageCreationRequest.Image);
-
+    var command = new SetHotelThumbnailCommand { HotelId = id };
+    mapper.Map(imageCreationRequest, command);
+    
     await mediator.Send(command, cancellationToken);
 
     return NoContent();
@@ -352,8 +294,8 @@ public class HotelsController(ISender mediator) : ControllerBase
     [FromForm] ImageCreationRequest imageCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new AddImageToHotelGalleryCommand(id,
-      imageCreationRequest.Image);
+    var command = new AddImageToHotelGalleryCommand { HotelId = id };
+    mapper.Map(imageCreationRequest, command);
 
     await mediator.Send(command, cancellationToken);
 

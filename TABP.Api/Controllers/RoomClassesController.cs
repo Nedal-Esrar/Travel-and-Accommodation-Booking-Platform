@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace TABP.Api.Controllers;
 [Route("api/room-classes")]
 [ApiVersion("1.0")]
 [Authorize(Roles = UserRoles.Admin)]
-public class RoomClassesController(ISender mediator) : ControllerBase
+public class RoomClassesController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Retrieve a page of room classes based on the provided parameters for management (admin).
@@ -40,19 +41,7 @@ public class RoomClassesController(ISender mediator) : ControllerBase
     [FromQuery] RoomClassesGetRequest roomClassesGetRequest,
     CancellationToken cancellationToken)
   {
-    var sortOrder = roomClassesGetRequest.SortOrder switch
-    {
-      "asc" => SortOrder.Ascending,
-      "desc" => SortOrder.Descending,
-      _ => (SortOrder?)null
-    };
-
-    var query = new GetRoomClassesForManagementQuery(
-      roomClassesGetRequest.SearchTerm,
-      sortOrder,
-      roomClassesGetRequest.SortColumn,
-      roomClassesGetRequest.PageNumber,
-      roomClassesGetRequest.PageSize);
+    var query = mapper.Map<GetRoomClassesForManagementQuery>(roomClassesGetRequest);
 
     var roomClasses = await mediator.Send(query, cancellationToken);
 
@@ -84,18 +73,9 @@ public class RoomClassesController(ISender mediator) : ControllerBase
     RoomClassCreationRequest roomClassCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new CreateRoomClassCommand(
-      roomClassCreationRequest.HotelId,
-      roomClassCreationRequest.Name,
-      roomClassCreationRequest.Description,
-      roomClassCreationRequest.AdultsCapacity,
-      roomClassCreationRequest.ChildrenCapacity,
-      roomClassCreationRequest.PricePerNight,
-      roomClassCreationRequest.AmenitiesIds ?? Enumerable.Empty<Guid>());
+    var command = mapper.Map<CreateRoomClassCommand>(roomClassCreationRequest);
 
-    await mediator.Send(
-      command,
-      cancellationToken);
+    await mediator.Send(command, cancellationToken);
 
     return Created();
   }
@@ -124,17 +104,10 @@ public class RoomClassesController(ISender mediator) : ControllerBase
     RoomClassUpdateRequest roomClassUpdateRequest,
     CancellationToken cancellationToken)
   {
-    var command = new UpdateRoomClassCommand(
-      id,
-      roomClassUpdateRequest.Name,
-      roomClassUpdateRequest.Description,
-      roomClassUpdateRequest.AdultsCapacity,
-      roomClassUpdateRequest.ChildrenCapacity,
-      roomClassUpdateRequest.PricePerNight);
+    var command = new UpdateRoomClassCommand { RoomClassId = id };
+    mapper.Map(roomClassUpdateRequest, command);
 
-    await mediator.Send(
-      command,
-      cancellationToken);
+    await mediator.Send(command, cancellationToken);
 
     return NoContent();
   }
@@ -159,11 +132,9 @@ public class RoomClassesController(ISender mediator) : ControllerBase
     Guid id,
     CancellationToken cancellationToken)
   {
-    var command = new DeleteRoomClassCommand(id);
+    var command = new DeleteRoomClassCommand { RoomClassId = id };
 
-    await mediator.Send(
-      command,
-      cancellationToken);
+    await mediator.Send(command, cancellationToken);
 
     return NoContent();
   }
@@ -190,8 +161,8 @@ public class RoomClassesController(ISender mediator) : ControllerBase
     [FromForm] ImageCreationRequest imageCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new AddImageToRoomClassGalleryCommand(id,
-      imageCreationRequest.Image);
+    var command = new AddImageToRoomClassGalleryCommand { RoomClassId = id };
+    mapper.Map(imageCreationRequest, command);
 
     await mediator.Send(command, cancellationToken);
 

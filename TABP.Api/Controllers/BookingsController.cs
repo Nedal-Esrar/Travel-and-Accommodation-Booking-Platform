@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Text.Json;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace TABP.Api.Controllers;
 [Route("api/user/bookings")]
 [ApiVersion("1.0")]
 [Authorize(Roles = UserRoles.Guest)]
-public class BookingsController(ISender mediator) : ControllerBase
+public class BookingsController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Create a new Booking for the current user.
@@ -50,13 +51,8 @@ public class BookingsController(ISender mediator) : ControllerBase
     var guestId = Guid.Parse(
       User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
 
-    var command = new CreateBookingCommand(guestId,
-      bookingCreationRequest.RoomIds,
-      bookingCreationRequest.HotelId,
-      bookingCreationRequest.CheckInDateUtc,
-      bookingCreationRequest.CheckOutDateUtc,
-      bookingCreationRequest.GuestRemarks,
-      bookingCreationRequest.PaymentMethod);
+    var command = new CreateBookingCommand { GuestId = guestId };
+    mapper.Map(bookingCreationRequest, command);
 
     var createdBooking = await mediator.Send(command, cancellationToken);
 
@@ -86,7 +82,11 @@ public class BookingsController(ISender mediator) : ControllerBase
     var guestId = Guid.Parse(
       User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
 
-    var command = new DeleteBookingCommand(guestId, id);
+    var command = new DeleteBookingCommand
+    {
+      GuestId = guestId,
+      BookingId = id
+    };
 
     await mediator.Send(command, cancellationToken);
 
@@ -115,7 +115,11 @@ public class BookingsController(ISender mediator) : ControllerBase
     var guestId = Guid.Parse(
       User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
 
-    var query = new GetInvoiceAsPdfQuery(guestId, id);
+    var query = new GetInvoiceAsPdfQuery
+    {
+      GuestId = guestId,
+      BookingId = id
+    };
 
     var pdf = await mediator.Send(query, cancellationToken);
 
@@ -145,7 +149,11 @@ public class BookingsController(ISender mediator) : ControllerBase
     var guestId = Guid.Parse(
       User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
 
-    var query = new GetBookingByIdQuery(guestId, id);
+    var query = new GetBookingByIdQuery
+    {
+      GuestId = guestId,
+      BookingId = id
+    };
 
     var booking = await mediator.Send(query, cancellationToken);
 
@@ -174,9 +182,8 @@ public class BookingsController(ISender mediator) : ControllerBase
     var guestId = Guid.Parse(
       User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
 
-    var query = new GetBookingsQuery(guestId,
-      bookingsGetRequest.PageNumber,
-      bookingsGetRequest.PageSize);
+    var query = new GetBookingsQuery { GuestId = guestId };
+    mapper.Map(bookingsGetRequest, query);
 
     var bookings = await mediator.Send(query, cancellationToken);
 

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace TABP.Api.Controllers;
 [Route("api/cities")]
 [ApiVersion("1.0")]
 [Authorize(Roles = UserRoles.Admin)]
-public class CitiesController(ISender mediator) : ControllerBase
+public class CitiesController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Retrieve a page of cities based on the provided parameters for management (admin).
@@ -41,19 +42,7 @@ public class CitiesController(ISender mediator) : ControllerBase
     [FromQuery] CitiesGetRequest citiesGetRequest,
     CancellationToken cancellationToken)
   {
-    var sortOrder = citiesGetRequest.SortOrder switch
-    {
-      "asc" => SortOrder.Ascending,
-      "desc" => SortOrder.Descending,
-      _ => (SortOrder?)null
-    };
-
-    var query = new GetCitiesForManagementQuery(
-      citiesGetRequest.SearchTerm,
-      sortOrder,
-      citiesGetRequest.SortColumn,
-      citiesGetRequest.PageNumber,
-      citiesGetRequest.PageSize);
+    var query = mapper.Map<GetCitiesForManagementQuery>(citiesGetRequest);
 
     var owners = await mediator.Send(query, cancellationToken);
 
@@ -84,7 +73,7 @@ public class CitiesController(ISender mediator) : ControllerBase
     [FromQuery] TrendingCitiesGetRequest trendingCitiesGetRequest,
     CancellationToken cancellationToken)
   {
-    var query = new GetTrendingCitiesQuery(trendingCitiesGetRequest.Count);
+    var query = mapper.Map<GetTrendingCitiesQuery>(trendingCitiesGetRequest);
 
     var cities = await mediator.Send(query, cancellationToken);
 
@@ -112,14 +101,9 @@ public class CitiesController(ISender mediator) : ControllerBase
     CityCreationRequest cityCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new CreateCityCommand(
-      cityCreationRequest.Name,
-      cityCreationRequest.Country,
-      cityCreationRequest.PostOffice);
+    var command = mapper.Map<CreateCityCommand>(cityCreationRequest);
 
-    await mediator.Send(
-      command,
-      cancellationToken);
+    await mediator.Send(command, cancellationToken);
 
     return Created();
   }
@@ -146,11 +130,9 @@ public class CitiesController(ISender mediator) : ControllerBase
     CityUpdateRequest cityUpdateRequest,
     CancellationToken cancellationToken)
   {
-    var command = new UpdateCityCommand(id,
-      cityUpdateRequest.Name,
-      cityUpdateRequest.Country,
-      cityUpdateRequest.PostOffice);
-
+    var command = new UpdateCityCommand { CityId = id };
+    mapper.Map(cityUpdateRequest, command);
+    
     await mediator.Send(command, cancellationToken);
 
     return NoContent();
@@ -175,7 +157,7 @@ public class CitiesController(ISender mediator) : ControllerBase
     Guid id,
     CancellationToken cancellationToken)
   {
-    var command = new DeleteCityCommand(id);
+    var command = new DeleteCityCommand { CityId = id };
 
     await mediator.Send(
       command,
@@ -205,8 +187,8 @@ public class CitiesController(ISender mediator) : ControllerBase
     [FromForm] ImageCreationRequest imageCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new SetCityThumbnailCommand(id,
-      imageCreationRequest.Image);
+    var command = new SetCityThumbnailCommand { CityId = id };
+    mapper.Map(imageCreationRequest, command);
 
     await mediator.Send(command, cancellationToken);
 

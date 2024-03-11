@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace TABP.Api.Controllers;
 [Route("api/user")]
 [ApiVersion("1.0")]
 [Authorize(Roles = UserRoles.Guest)]
-public class GuestsController(ISender mediator) : ControllerBase
+public class GuestsController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Retrieve the recently N visited hotels by the current user.
@@ -40,8 +41,8 @@ public class GuestsController(ISender mediator) : ControllerBase
       User.FindFirstValue(ClaimTypes.NameIdentifier)
       ?? throw new ArgumentNullException());
 
-    var query = new GetRecentlyVisitedHotelsForGuestQuery(guestId,
-      recentlyVisitedHotelsGetRequest.Count);
+    var query = new GetRecentlyVisitedHotelsForGuestQuery { GuestId = guestId };
+    mapper.Map(recentlyVisitedHotelsGetRequest, query);
 
     var hotels = await mediator.Send(query, cancellationToken);
 

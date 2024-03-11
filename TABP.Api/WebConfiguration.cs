@@ -32,6 +32,8 @@ public static class WebConfiguration
       });
 
     services.AddDateOnlyTimeOnlyStringConverters();
+    
+    services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
     services.AddFluentValidation();
 

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ namespace TABP.Api.Controllers;
 [Route("api/owners")]
 [Authorize(Roles = UserRoles.Admin)]
 [ApiVersion("1.0")]
-public class OwnersController(ISender mediator) : ControllerBase
+public class OwnersController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Retrieve a page of owners based on the provided parameters.
@@ -39,19 +40,7 @@ public class OwnersController(ISender mediator) : ControllerBase
     [FromQuery] OwnersGetRequest ownersGetRequest,
     CancellationToken cancellationToken)
   {
-    var sortOrder = ownersGetRequest.SortOrder switch
-    {
-      "asc" => SortOrder.Ascending,
-      "desc" => SortOrder.Descending,
-      _ => (SortOrder?)null
-    };
-
-    var query = new GetOwnersQuery(
-      ownersGetRequest.SearchTerm,
-      sortOrder,
-      ownersGetRequest.SortColumn,
-      ownersGetRequest.PageNumber,
-      ownersGetRequest.PageSize);
+    var query = mapper.Map<GetOwnersQuery>(ownersGetRequest);
 
     var owners = await mediator.Send(query, cancellationToken);
 
@@ -79,7 +68,7 @@ public class OwnersController(ISender mediator) : ControllerBase
   public async Task<ActionResult<OwnerResponse>> GetOwner(Guid id,
     CancellationToken cancellationToken)
   {
-    var query = new GetOwnerByIdQuery(id);
+    var query = new GetOwnerByIdQuery { OwnerId = id };
 
     var owner = await mediator.Send(query, cancellationToken);
 
@@ -104,15 +93,9 @@ public class OwnersController(ISender mediator) : ControllerBase
     OwnerCreationRequest ownerCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new CreateOwnerCommand(
-      ownerCreationRequest.FirstName,
-      ownerCreationRequest.LastName,
-      ownerCreationRequest.Email,
-      ownerCreationRequest.PhoneNumber);
+    var command = mapper.Map<CreateOwnerCommand>(ownerCreationRequest);
 
-    var createdOwner = await mediator.Send(
-      command,
-      cancellationToken);
+    var createdOwner = await mediator.Send(command, cancellationToken);
 
     return CreatedAtAction(nameof(GetOwner), new { id = createdOwner.Id }, createdOwner);
   }
@@ -134,14 +117,11 @@ public class OwnersController(ISender mediator) : ControllerBase
   [ProducesResponseType(StatusCodes.Status403Forbidden)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
   [HttpPut("{id:guid}")]
-  public async Task<IActionResult> UpdateOwner(Guid id, OwnerUpdateRequest ownerUpdateRequest, CancellationToken cancellationToken)
+  public async Task<IActionResult> UpdateOwner(Guid id, OwnerUpdateRequest ownerUpdateRequest, 
+    CancellationToken cancellationToken)
   {
-    var command = new UpdateOwnerCommand(
-      id,
-      ownerUpdateRequest.FirstName,
-      ownerUpdateRequest.LastName,
-      ownerUpdateRequest.Email,
-      ownerUpdateRequest.PhoneNumber);
+    var command = new UpdateOwnerCommand { OwnerId = id };
+    mapper.Map(ownerUpdateRequest, command);
 
     await mediator.Send(command, cancellationToken);
 

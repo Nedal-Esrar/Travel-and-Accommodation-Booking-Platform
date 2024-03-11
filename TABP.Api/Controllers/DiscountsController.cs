@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ namespace TABP.Api.Controllers;
 [Route("api/room-classes/{roomClassId:guid}/discounts")]
 [ApiVersion("1.0")]
 [Authorize(Roles = UserRoles.Admin)]
-public class DiscountsController(ISender mediator) : ControllerBase
+public class DiscountsController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Retrieve a page of discounts for a room class specified by ID based on the provided parameters.
@@ -38,19 +39,8 @@ public class DiscountsController(ISender mediator) : ControllerBase
     [FromQuery] DiscountsGetRequest discountsGetRequest,
     CancellationToken cancellationToken)
   {
-    var sortOrder = discountsGetRequest.SortOrder switch
-    {
-      "asc" => SortOrder.Ascending,
-      "desc" => SortOrder.Descending,
-      _ => (SortOrder?)null
-    };
-
-    var query = new GetDiscountsQuery(
-      roomClassId,
-      sortOrder,
-      discountsGetRequest.SortColumn,
-      discountsGetRequest.PageNumber,
-      discountsGetRequest.PageSize);
+    var query = new GetDiscountsQuery { RoomClassId = roomClassId };
+    mapper.Map(discountsGetRequest, query);
 
     var discounts = await mediator.Send(query, cancellationToken);
 
@@ -82,9 +72,11 @@ public class DiscountsController(ISender mediator) : ControllerBase
     Guid id,
     CancellationToken cancellationToken)
   {
-    var query = new GetDiscountByIdQuery(
-      roomClassId,
-      id);
+    var query = new GetDiscountByIdQuery
+    {
+      RoomClassId = roomClassId,
+      DiscountId = id
+    };
 
     var discount = await mediator.Send(query,
       cancellationToken);
@@ -114,11 +106,8 @@ public class DiscountsController(ISender mediator) : ControllerBase
     DiscountCreationRequest discountCreationRequest,
     CancellationToken cancellationToken)
   {
-    var command = new CreateDiscountCommand(
-      roomClassId,
-      discountCreationRequest.Percentage,
-      discountCreationRequest.StartDateUtc,
-      discountCreationRequest.EndDateUtc);
+    var command = new CreateDiscountCommand { RoomClassId = roomClassId };
+    mapper.Map(discountCreationRequest, command);
 
     var createdDiscount = await mediator.Send(command, cancellationToken);
 
@@ -146,7 +135,11 @@ public class DiscountsController(ISender mediator) : ControllerBase
     Guid id,
     CancellationToken cancellationToken)
   {
-    var command = new DeleteDiscountCommand(roomClassId, id);
+    var command = new DeleteDiscountCommand
+    {
+      RoomClassId = roomClassId,
+      DiscountId = id
+    };
 
     await mediator.Send(command, cancellationToken);
 

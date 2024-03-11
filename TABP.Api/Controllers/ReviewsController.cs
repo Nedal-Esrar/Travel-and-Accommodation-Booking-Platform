@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Text.Json;
 using Asp.Versioning;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace TABP.Api.Controllers;
 [Route("api/hotels/{hotelId:guid}/reviews")]
 [ApiVersion("1.0")]
 [Authorize(Roles = UserRoles.Guest)]
-public class ReviewsController(ISender mediator) : ControllerBase
+public class ReviewsController(ISender mediator, IMapper mapper) : ControllerBase
 {
   /// <summary>
   ///   Retrieve a page of reviews for a hotel specified by ID based on the provided parameters.
@@ -42,25 +43,15 @@ public class ReviewsController(ISender mediator) : ControllerBase
     [FromQuery] ReviewsGetRequest reviewsGetRequest,
     CancellationToken cancellationToken)
   {
-    var sortOrder = reviewsGetRequest.SortOrder switch
-    {
-      "asc" => SortOrder.Ascending,
-      "desc" => SortOrder.Descending,
-      _ => (SortOrder?)null
-    };
+    var query = new GetReviewsByHotelIdQuery { HotelId = hotelId };
+    mapper.Map(reviewsGetRequest, query);
 
-    var query = new GetReviewsByHotelIdQuery(
-      hotelId, sortOrder,
-      reviewsGetRequest.SortColumn,
-      reviewsGetRequest.PageNumber,
-      reviewsGetRequest.PageSize);
-
-    var owners = await mediator.Send(query, cancellationToken);
+    var reviews = await mediator.Send(query, cancellationToken);
 
     Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      owners.PaginationMetadata);
+      reviews.PaginationMetadata);
 
-    return Ok(owners.Items);
+    return Ok(reviews.Items);
   }
 
   /// <summary>
@@ -79,7 +70,11 @@ public class ReviewsController(ISender mediator) : ControllerBase
   public async Task<ActionResult<ReviewResponse>> GetReviewById(
     Guid hotelId, Guid id, CancellationToken cancellationToken = default)
   {
-    var query = new GetReviewByIdQuery(hotelId, id);
+    var query = new GetReviewByIdQuery
+    {
+      HotelId = hotelId,
+      ReviewId = id
+    };
 
     var review = await mediator.Send(query, cancellationToken);
 
@@ -117,14 +112,14 @@ public class ReviewsController(ISender mediator) : ControllerBase
       User.FindFirstValue(ClaimTypes.NameIdentifier) ??
       throw new ArgumentNullException());
 
-    var command = new CreateReviewCommand(
-      guestId, hotelId,
-      reviewCreationRequest.Content,
-      reviewCreationRequest.Rating);
+    var command = new CreateReviewCommand
+    {
+      GuestId = guestId, 
+      HotelId = hotelId
+    };
+    mapper.Map(reviewCreationRequest, command);
 
-    var createdReview = await mediator.Send(
-      command,
-      cancellationToken);
+    var createdReview = await mediator.Send(command, cancellationToken);
     
     return CreatedAtAction(nameof(GetReviewById), new { id = createdReview }, createdReview);
   }
@@ -158,10 +153,13 @@ public class ReviewsController(ISender mediator) : ControllerBase
       User.FindFirstValue(ClaimTypes.NameIdentifier) ??
       throw new ArgumentNullException());
 
-    var command = new UpdateReviewCommand(
-      guestId, hotelId, id,
-      reviewUpdateRequest.Content,
-      reviewUpdateRequest.Rating);
+    var command = new UpdateReviewCommand
+    {
+      GuestId = guestId,
+      HotelId = hotelId,
+      ReviewId = id
+    };
+    mapper.Map(reviewUpdateRequest, command);
 
     await mediator.Send(
       command,
@@ -195,8 +193,12 @@ public class ReviewsController(ISender mediator) : ControllerBase
       User.FindFirstValue(ClaimTypes.NameIdentifier)
       ?? throw new ArgumentNullException());
 
-    var command = new DeleteReviewCommand(
-      guestId, hotelId, id);
+    var command = new DeleteReviewCommand
+    {
+      GuestId = guestId,
+      HotelId = hotelId,
+      ReviewId = id
+    };
 
     await mediator.Send(
       command,

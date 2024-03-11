@@ -1,5 +1,7 @@
 ﻿namespace TABP.Api.Dtos.Amenities;
 
-public record AmenityCreationRequest(
-  string Name,
-  string? Description);
+public class AmenityCreationRequest
+{
+  public string Name { get; init; }
+  public string? Description { get; init; }
+}

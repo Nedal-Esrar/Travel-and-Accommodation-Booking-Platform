@@ -2,4 +2,7 @@ using MediatR;
 
 namespace TABP.Application.Hotels.Delete;
 
-public record DeleteHotelCommand(Guid HotelId) : IRequest;
+public class DeleteHotelCommand : IRequest
+{
+  public Guid HotelId { get; init; }
+}

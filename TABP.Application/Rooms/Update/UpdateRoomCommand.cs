@@ -2,7 +2,9 @@
 
 namespace TABP.Application.Rooms.Update;
 
-public record UpdateRoomCommand(
-  Guid RoomClassId,
-  Guid RoomId,
-  string Number) : IRequest;
+public class UpdateRoomCommand : IRequest
+{
+  public Guid RoomClassId { get; init; }
+  public Guid RoomId { get; init; }
+  public string Number { get; init; }
+}

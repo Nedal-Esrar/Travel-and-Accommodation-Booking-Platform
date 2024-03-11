@@ -1,4 +1,6 @@
-﻿namespace TAABB.Application.Users.Login;
+﻿namespace TABP.Application.Users.Login;
 
-public record LoginResponse(
-  string Token);
+public class LoginResponse
+{
+  public string Token { get; init; }
+}

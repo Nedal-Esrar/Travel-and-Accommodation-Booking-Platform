@@ -5,9 +5,11 @@ using TABP.Domain.Models;
 
 namespace TABP.Application.Discounts.Get;
 
-public record GetDiscountsQuery(
-  Guid RoomClassId,
-  SortOrder? SortOrder,
-  string? SortColumn,
-  int PageNumber,
-  int PageSize) : IRequest<PaginatedList<DiscountResponse>>;
+public class GetDiscountsQuery : IRequest<PaginatedList<DiscountResponse>>
+{
+  public Guid RoomClassId { get; init; }
+  public SortOrder? SortOrder { get; init; }
+  public string? SortColumn { get; init; }
+  public int PageNumber { get; init; }
+  public int PageSize { get; init; }
+}

@@ -1,3 +1,6 @@
 ﻿namespace TABP.Api.Dtos.Cities;
 
-public record TrendingCitiesGetRequest(int Count);
+public class TrendingCitiesGetRequest
+{
+  public int Count { get; init; }
+}

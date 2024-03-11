@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace TABP.Application.RoomClasses.AddImageToGallery;
 
-public record AddImageToRoomClassGalleryCommand(
-  Guid RoomClassId,
-  IFormFile Image) : IRequest;
+public class AddImageToRoomClassGalleryCommand : IRequest
+{
+  public Guid RoomClassId { get; init; }
+  public IFormFile Image { get; init; }
+}

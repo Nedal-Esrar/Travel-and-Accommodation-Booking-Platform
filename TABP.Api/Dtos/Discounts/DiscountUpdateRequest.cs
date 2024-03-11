@@ -2,7 +2,9 @@
 
 namespace TABP.Api.Dtos.Discounts;
 
-public record DiscountUpdateRequest(
-  decimal Percentage,
-  DateTime StartDateUtc,
-  DateTime EndDateUtc) : IRequest;
+public class DiscountUpdateRequest : IRequest
+{
+  public decimal Percentage { get; init; }
+  public DateTime StartDateUtc { get; init; }
+  public DateTime EndDateUtc { get; init; }
+}

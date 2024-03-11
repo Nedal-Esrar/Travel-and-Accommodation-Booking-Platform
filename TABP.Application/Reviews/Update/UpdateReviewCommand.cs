@@ -2,9 +2,11 @@
 
 namespace TABP.Application.Reviews.Update;
 
-public record UpdateReviewCommand(
-  Guid ReviewId,
-  Guid GuestId,
-  Guid HotelId,
-  string Content,
-  int Rating) : IRequest;
+public class UpdateReviewCommand : IRequest
+{
+  public Guid ReviewId { get; init; }
+  public Guid GuestId { get; init; }
+  public Guid HotelId { get; init; }
+  public string Content { get; init; }
+  public int Rating { get; init; }
+}

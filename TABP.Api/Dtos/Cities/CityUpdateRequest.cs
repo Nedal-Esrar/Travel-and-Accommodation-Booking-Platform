@@ -1,6 +1,8 @@
 ﻿namespace TABP.Api.Dtos.Cities;
 
-public record CityUpdateRequest(
-  string Name,
-  string Country,
-  string PostOffice);
+public class CityUpdateRequest
+{
+  public string Name { get; init; }
+  public string Country { get; init; }
+  public string PostOffice { get; init; }
+}

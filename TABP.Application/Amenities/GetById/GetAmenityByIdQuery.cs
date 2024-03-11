@@ -3,4 +3,7 @@ using TABP.Application.Amenities.Common;
 
 namespace TABP.Application.Amenities.GetById;
 
-public record GetAmenityByIdQuery(Guid AmenityId) : IRequest<AmenityResponse>;
+public class GetAmenityByIdQuery : IRequest<AmenityResponse>
+{
+  public Guid AmenityId { get; init; }
+}

@@ -2,4 +2,8 @@ using MediatR;
 
 namespace TABP.Application.Rooms.Delete;
 
-public record DeleteRoomCommand(Guid RoomClassId, Guid RoomId) : IRequest;
+public class DeleteRoomCommand : IRequest
+{
+  public Guid RoomClassId { get; init; } 
+  public Guid RoomId { get; init; }
+}

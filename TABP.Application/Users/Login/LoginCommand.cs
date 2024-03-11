@@ -1,8 +1,9 @@
 using MediatR;
-using TAABB.Application.Users.Login;
 
 namespace TABP.Application.Users.Login;
 
-public record LoginCommand(
-  string Email,
-  string Password) : IRequest<LoginResponse>;
+public class LoginCommand : IRequest<LoginResponse>
+{
+  public string Email { get; init; }
+  public string Password { get; init; }
+}

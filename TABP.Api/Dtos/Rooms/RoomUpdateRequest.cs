@@ -1,4 +1,6 @@
 ﻿namespace TABP.Api.Dtos.Rooms;
 
-public record RoomUpdateRequest(
-  string Number);
+public class RoomUpdateRequest
+{
+  public string Number { get; init; }
+}

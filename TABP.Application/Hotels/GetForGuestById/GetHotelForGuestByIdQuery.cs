@@ -2,4 +2,7 @@
 
 namespace TABP.Application.Hotels.GetForGuestById;
 
-public record GetHotelForGuestByIdQuery(Guid HotelId) : IRequest<HotelForGuestResponse>;
+public class GetHotelForGuestByIdQuery : IRequest<HotelForGuestResponse>
+{
+  public Guid HotelId { get; init; }
+}

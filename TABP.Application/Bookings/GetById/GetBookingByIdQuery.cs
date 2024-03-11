@@ -3,6 +3,8 @@ using TABP.Application.Bookings.Common;
 
 namespace TABP.Application.Bookings.GetById;
 
-public record GetBookingByIdQuery(
-  Guid GuestId,
-  Guid BookingId) : IRequest<BookingResponse>;
+public class GetBookingByIdQuery : IRequest<BookingResponse>
+{
+  public Guid GuestId { get; init; }
+  public Guid BookingId { get; init; }
+}

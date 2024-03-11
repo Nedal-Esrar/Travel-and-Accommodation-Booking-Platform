@@ -1,27 +1,26 @@
-﻿namespace TABP.Api.Dtos.Common;
+﻿using System.Text.Json.Serialization;
 
-public record ResourcesQueryRequest
+namespace TABP.Api.Dtos.Common;
+
+public class ResourcesQueryRequest
 {
   private const int MaxPageSize = 20;
 
-  protected ResourcesQueryRequest(string? searchTerm, string? sortOrder, string? sortColumn, int pageNumber,
-    int pageSize)
-  {
-    SearchTerm = searchTerm;
-    SortOrder = sortOrder;
-    SortColumn = sortColumn;
-    PageNumber = pageNumber;
-    PageSize = Math.Min(pageSize, MaxPageSize);
-  }
+  private int _pageSize = 10;
 
-  public string? SearchTerm { get; }
+  public string? SearchTerm { get; init; }
 
   /// <summary>
   ///   Should be empty, 'asc', or 'desc'
   /// </summary>
-  public string? SortOrder { get; }
+  public string? SortOrder { get; init; }
 
-  public string? SortColumn { get; }
-  public int PageNumber { get; }
-  public int PageSize { get; }
+  public string? SortColumn { get; init; }
+  public int PageNumber { get; init; } = 1;
+
+  public int PageSize
+  {
+    get => _pageSize;
+    init => _pageSize = Math.Min(value, MaxPageSize);
+  }
 }

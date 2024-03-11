@@ -1,6 +1,5 @@
 using AutoMapper;
 using MediatR;
-using TAABB.Application.Users.Login;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Interfaces.Auth;
 using TABP.Domain.Interfaces.Persistence.Repositories;

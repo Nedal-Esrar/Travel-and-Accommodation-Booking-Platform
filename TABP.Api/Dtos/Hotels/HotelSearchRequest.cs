@@ -4,25 +4,16 @@ using TABP.Domain.Enums;
 namespace TABP.Api.Dtos.Hotels;
 
 /// <param name="SortColumn">Should be empty, 'id', 'name', 'starRating', 'price', or 'ReviewsRating'.</param>
-public record HotelSearchRequest(
-  string? SearchTerm,
-  string? SortOrder,
-  string? SortColumn,
-  DateOnly CheckInDateUtc,
-  DateOnly CheckOutDateUtc,
-  int NumberOfAdults,
-  int NumberOfChildren,
-  int NumberOfRooms,
-  decimal? MinPrice,
-  decimal? MaxPrice,
-  int? MinStarRating,
-  IEnumerable<RoomType>? RoomTypes,
-  IEnumerable<Guid>? Amenities,
-  int PageNumber = 1,
-  int PageSize = 10) :
-  ResourcesQueryRequest(
-    SearchTerm,
-    SortOrder,
-    SortColumn,
-    PageNumber,
-    PageSize);
+public class HotelSearchRequest : ResourcesQueryRequest
+{
+  public DateOnly CheckInDateUtc { get; init; }
+  public DateOnly CheckOutDateUtc { get; init; }
+  public int NumberOfAdults { get; init; }
+  public int NumberOfChildren { get; init; }
+  public int NumberOfRooms { get; init; }
+  public decimal? MinPrice { get; init; }
+  public decimal? MaxPrice { get; init; }
+  public int? MinStarRating { get; init; }
+  public IEnumerable<RoomType>? RoomTypes { get; init; }
+  public IEnumerable<Guid>? Amenities { get; init; }
+}

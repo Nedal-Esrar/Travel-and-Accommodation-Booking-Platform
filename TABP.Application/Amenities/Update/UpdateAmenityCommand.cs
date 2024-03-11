@@ -2,7 +2,10 @@ using MediatR;
 
 namespace TABP.Application.Amenities.Update;
 
-public record UpdateAmenityCommand(
-  Guid AmenityId,
-  string Name,
-  string? Description) : IRequest;
+public class UpdateAmenityCommand : IRequest
+{
+  public Guid AmenityId { get; init; }
+  public string Name { get; init; }
+
+  public string? Description { get; init; }
+}

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace TABP.Application.Cities.SetThumbnail;
 
-public record SetCityThumbnailCommand(
-  Guid CityId,
-  IFormFile Image) : IRequest;
+public class SetCityThumbnailCommand : IRequest
+{
+  public Guid CityId { get; init; }
+  public IFormFile Image { get; init; }
+}

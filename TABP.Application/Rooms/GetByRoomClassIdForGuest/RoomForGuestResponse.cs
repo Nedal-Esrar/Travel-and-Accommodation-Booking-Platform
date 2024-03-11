@@ -1,5 +1,7 @@
 ﻿namespace TABP.Application.Rooms.GetByRoomClassIdForGuest;
 
-public record RoomForGuestResponse(
-  Guid Id,
-  string Number);
+public class RoomForGuestResponse
+{
+  public Guid Id { get; init; }
+  public string Number { get; init; }
+}

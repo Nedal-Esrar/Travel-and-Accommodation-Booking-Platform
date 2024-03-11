@@ -2,9 +2,11 @@ using MediatR;
 
 namespace TABP.Application.Owners.Update;
 
-public record UpdateOwnerCommand(
-  Guid OwnerId,
-  string FirstName,
-  string LastName,
-  string Email,
-  string PhoneNumber) : IRequest;
+public class UpdateOwnerCommand : IRequest
+{
+  public Guid OwnerId { get; init; }
+  public string FirstName { get; init; }
+  public string LastName { get; init; }
+  public string Email { get; init; }
+  public string PhoneNumber { get; init; }
+}

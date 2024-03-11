@@ -1,4 +1,6 @@
 ﻿namespace TABP.Api.Dtos.Rooms;
 
-public record RoomCreationRequest(
-  string Number);
+public class RoomCreationRequest
+{
+  public string Number { get; init; }
+}

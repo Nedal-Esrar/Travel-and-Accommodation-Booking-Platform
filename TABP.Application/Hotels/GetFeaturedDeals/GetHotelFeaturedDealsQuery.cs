@@ -2,4 +2,7 @@
 
 namespace TABP.Application.Hotels.GetFeaturedDeals;
 
-public record GetHotelFeaturedDealsQuery(int Count) : IRequest<IEnumerable<HotelFeaturedDealResponse>>;
+public class GetHotelFeaturedDealsQuery : IRequest<IEnumerable<HotelFeaturedDealResponse>>
+{
+  public int Count { get; init; }
+}

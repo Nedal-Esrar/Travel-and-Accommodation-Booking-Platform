@@ -2,6 +2,8 @@
 
 namespace TABP.Application.Hotels.GetRecentlyVisited;
 
-public record GetRecentlyVisitedHotelsForGuestQuery(
-  Guid GuestId,
-  int Count) : IRequest<IEnumerable<RecentlyVisitedHotelResponse>>;
+public class GetRecentlyVisitedHotelsForGuestQuery : IRequest<IEnumerable<RecentlyVisitedHotelResponse>>
+{
+  public Guid GuestId { get; init; }
+  public int Count { get; init; }
+}

@@ -2,6 +2,8 @@
 
 namespace TABP.Application.Bookings.GetInvoiceAsPdf;
 
-public record GetInvoiceAsPdfQuery(
-  Guid GuestId,
-  Guid BookingId) : IRequest<byte[]>;
+public class GetInvoiceAsPdfQuery : IRequest<byte[]>
+{
+  public Guid GuestId { get; init; }
+  public Guid BookingId { get; init; }
+}

@@ -1,3 +1,6 @@
 ﻿namespace TABP.Api.Dtos.Hotels;
 
-public record RecentlyVisitedHotelsGetRequest(int Count);
+public class RecentlyVisitedHotelsGetRequest
+{
+  public int Count { get; init; }
+}

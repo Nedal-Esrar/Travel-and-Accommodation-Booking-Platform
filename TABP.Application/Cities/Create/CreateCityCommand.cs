@@ -2,7 +2,9 @@ using MediatR;
 
 namespace TABP.Application.Cities.Create;
 
-public record CreateCityCommand(
-  string Name,
-  string Country,
-  string PostOffice) : IRequest<CityResponse>;
+public class CreateCityCommand : IRequest<CityResponse>
+{
+  public string Name { get; init; }
+  public string Country { get; init; }
+  public string PostOffice { get; init; }
+}

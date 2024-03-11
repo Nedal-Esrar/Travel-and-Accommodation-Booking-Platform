@@ -1,6 +1,8 @@
 ﻿namespace TABP.Api.Dtos.Discounts;
 
-public record DiscountCreationRequest(
-  decimal Percentage,
-  DateTime StartDateUtc,
-  DateTime EndDateUtc);
+public class DiscountCreationRequest
+{
+  public decimal Percentage { get; init; }
+  public DateTime StartDateUtc { get; init; }
+  public DateTime EndDateUtc { get; init; }
+}

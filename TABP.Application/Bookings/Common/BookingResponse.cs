@@ -1,9 +1,11 @@
 ﻿namespace TABP.Application.Bookings.Common;
 
-public record BookingResponse(
-  Guid Id,
-  string HotelName,
-  decimal TotalPrice,
-  DateOnly CheckInDateUtc,
-  DateOnly CheckOutDateUtc,
-  DateOnly BookingDateUtc);
+public class BookingResponse
+{
+  public Guid Id { get; init; }
+  public string HotelName { get; init; }
+  public decimal TotalPrice { get; init; }
+  public DateOnly CheckInDateUtc { get; init; }
+  public DateOnly CheckOutDateUtc { get; init; }
+  public DateOnly BookingDateUtc { get; init; }
+}

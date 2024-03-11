@@ -2,10 +2,12 @@
 
 namespace TABP.Api.Dtos.Bookings;
 
-public record BookingCreationRequest(
-  List<Guid> RoomIds,
-  Guid HotelId,
-  DateOnly CheckInDateUtc,
-  DateOnly CheckOutDateUtc,
-  string? GuestRemarks,
-  PaymentMethod PaymentMethod);
+public class BookingCreationRequest
+{
+  public IEnumerable<Guid> RoomIds { get; init; }
+  public Guid HotelId { get; init; }
+  public DateOnly CheckInDateUtc { get; init; }
+  public DateOnly CheckOutDateUtc { get; init; }
+  public string? GuestRemarks { get; init; }
+  public PaymentMethod PaymentMethod { get; init; }
+}

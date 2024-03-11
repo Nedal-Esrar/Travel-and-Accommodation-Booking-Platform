@@ -2,6 +2,8 @@
 
 namespace TABP.Application.Discounts.GetById;
 
-public record GetDiscountByIdQuery(
-  Guid RoomClassId,
-  Guid DiscountId) : IRequest<DiscountResponse>;
+public class GetDiscountByIdQuery : IRequest<DiscountResponse>
+{
+  public Guid RoomClassId { get; init; }
+  public Guid DiscountId { get; init; }
+}

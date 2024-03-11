@@ -1,10 +1,12 @@
 ﻿namespace TABP.Application.Cities.GetForManagement;
 
-public record CityForManagementResponse(
-  Guid Id,
-  string Name,
-  string Country,
-  string PostOffice,
-  int NumberOfHotels,
-  DateTime CreatedAtUtc,
-  DateTime? ModifiedAtUtc);
+public class CityForManagementResponse
+{
+  public Guid Id { get; init; }
+  public string Name { get; init; }
+  public string Country { get; init; }
+  public string PostOffice { get; init; }
+  public int NumberOfHotels { get; init; }
+  public DateTime CreatedAtUtc { get; init; }
+  public DateTime? ModifiedAtUtc { get; init; }
+}

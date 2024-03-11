@@ -1,3 +1,6 @@
 ﻿namespace TABP.Api.Dtos.Images;
 
-public record ImageCreationRequest(IFormFile Image);
+public class ImageCreationRequest
+{
+  public IFormFile Image { get; init; }
+}

@@ -2,8 +2,10 @@ using MediatR;
 
 namespace TABP.Application.Cities.Update;
 
-public record UpdateCityCommand(
-  Guid CityId,
-  string Name,
-  string Country,
-  string PostOffice) : IRequest;
+public class UpdateCityCommand : IRequest
+{
+  public Guid CityId { get; init; }
+  public string Name { get; init; }
+  public string Country { get; init; }
+  public string PostOffice { get; init; }
+}

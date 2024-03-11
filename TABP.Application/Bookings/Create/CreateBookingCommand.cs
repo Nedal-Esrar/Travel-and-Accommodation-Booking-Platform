@@ -4,11 +4,13 @@ using TABP.Domain.Enums;
 
 namespace TABP.Application.Bookings.Create;
 
-public record CreateBookingCommand(
-  Guid GuestId,
-  IEnumerable<Guid> RoomIds,
-  Guid HotelId,
-  DateOnly CheckInDateUtc,
-  DateOnly CheckOutDateUtc,
-  string? GuestRemarks,
-  PaymentMethod PaymentMethod) : IRequest<BookingResponse>;
+public class CreateBookingCommand : IRequest<BookingResponse>
+{
+  public Guid GuestId { get; init; }
+  public IEnumerable<Guid> RoomIds { get; init; }
+  public Guid HotelId { get; init; }
+  public DateOnly CheckInDateUtc { get; init; }
+  public DateOnly CheckOutDateUtc { get; init; }
+  public string? GuestRemarks { get; init; }
+  public PaymentMethod PaymentMethod { get; init; }
+}

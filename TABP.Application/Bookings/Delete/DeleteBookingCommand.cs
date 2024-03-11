@@ -2,6 +2,8 @@
 
 namespace TABP.Application.Bookings.Delete;
 
-public record DeleteBookingCommand(
-  Guid GuestId,
-  Guid BookingId) : IRequest;
+public class DeleteBookingCommand : IRequest
+{
+  public Guid GuestId { get; init; }
+  public Guid BookingId { get; init; }
+}

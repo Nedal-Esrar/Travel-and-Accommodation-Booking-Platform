@@ -5,9 +5,11 @@ using TABP.Domain.Models;
 
 namespace TABP.Application.Owners.Get;
 
-public record GetOwnersQuery(
-  string? SearchTerm,
-  SortOrder? SortOrder,
-  string? SortColumn,
-  int PageNumber,
-  int PageSize) : IRequest<PaginatedList<OwnerResponse>>;
+public class GetOwnersQuery : IRequest<PaginatedList<OwnerResponse>>
+{
+  public string? SearchTerm { get; init; }
+  public SortOrder? SortOrder { get; init; }
+  public string? SortColumn { get; init; }
+  public int PageNumber { get; init; }
+  public int PageSize { get; init; }
+}

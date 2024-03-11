@@ -4,7 +4,9 @@ using TABP.Domain.Models;
 
 namespace TABP.Application.Bookings.GetForGuest;
 
-public record GetBookingsQuery(
-  Guid GuestId,
-  int PageNumber,
-  int PageSize) : IRequest<PaginatedList<BookingResponse>>;
+public class GetBookingsQuery : IRequest<PaginatedList<BookingResponse>>
+{
+  public Guid GuestId { get; init; }
+  public int PageNumber { get; init; }
+  public int PageSize { get; init; }
+}

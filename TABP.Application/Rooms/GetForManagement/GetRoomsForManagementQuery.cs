@@ -4,10 +4,12 @@ using TABP.Domain.Models;
 
 namespace TABP.Application.Rooms.GetForManagement;
 
-public record GetRoomsForManagementQuery(
-  Guid RoomClassId,
-  string? SearchTerm,
-  SortOrder? SortOrder,
-  string? SortColumn,
-  int PageNumber,
-  int PageSize) : IRequest<PaginatedList<RoomForManagementResponse>>;
+public class GetRoomsForManagementQuery : IRequest<PaginatedList<RoomForManagementResponse>>
+{
+  public Guid RoomClassId { get; init; }
+  public string? SearchTerm { get; init; }
+  public SortOrder? SortOrder { get; init; }
+  public string? SortColumn { get; init; }
+  public int PageNumber { get; init; }
+  public int PageSize { get; init; }
+}

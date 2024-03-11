@@ -1,5 +1,7 @@
 ﻿namespace TABP.Api.Dtos.Auth;
 
-public record LoginRequest(
-  string Email,
-  string Password);
+public class LoginRequest
+{
+  public string Email { get; init; }
+  public string Password { get; init; }
+}

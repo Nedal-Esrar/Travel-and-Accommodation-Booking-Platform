@@ -1,7 +1,9 @@
 ﻿namespace TABP.Api.Dtos.Owners;
 
-public record OwnerUpdateRequest(
-  string FirstName,
-  string LastName,
-  string Email,
-  string PhoneNumber);
+public class OwnerUpdateRequest
+{
+  public string FirstName { get; init; }
+  public string LastName { get; init; }
+  public string Email { get; init; }
+  public string PhoneNumber { get; init; }
+}

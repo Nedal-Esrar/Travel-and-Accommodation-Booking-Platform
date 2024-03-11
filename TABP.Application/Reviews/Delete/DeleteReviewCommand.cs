@@ -2,7 +2,9 @@
 
 namespace TABP.Application.Reviews.Delete;
 
-public record DeleteReviewCommand(
-  Guid GuestId,
-  Guid HotelId,
-  Guid ReviewId) : IRequest;
+public class DeleteReviewCommand : IRequest
+{
+  public Guid GuestId { get; init; }
+  public Guid HotelId { get; init; }
+  public Guid ReviewId { get; init; }
+}

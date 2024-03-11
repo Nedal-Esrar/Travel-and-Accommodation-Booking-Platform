@@ -3,8 +3,10 @@ using TABP.Application.Discounts.GetById;
 
 namespace TABP.Application.Discounts.Create;
 
-public record CreateDiscountCommand(
-  Guid RoomClassId,
-  decimal Percentage,
-  DateTime StartDateUtc,
-  DateTime EndDateUtc) : IRequest<DiscountResponse>;
+public class CreateDiscountCommand : IRequest<DiscountResponse>
+{
+  public Guid RoomClassId { get; init; }
+  public decimal Percentage { get; init; }
+  public DateTime StartDateUtc { get; init; }
+  public DateTime EndDateUtc { get; init; }
+}

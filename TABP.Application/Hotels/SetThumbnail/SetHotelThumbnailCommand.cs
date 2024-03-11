@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace TABP.Application.Hotels.SetThumbnail;
 
-public record SetHotelThumbnailCommand(
-  Guid HotelId,
-  IFormFile Image) : IRequest;
+public class SetHotelThumbnailCommand : IRequest
+{
+  public Guid HotelId { get; init; }
+  public IFormFile Image { get; init; }
+}

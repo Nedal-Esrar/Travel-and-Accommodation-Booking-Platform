@@ -3,4 +3,7 @@ using TABP.Application.Owners.Common;
 
 namespace TABP.Application.Owners.GetById;
 
-public record GetOwnerByIdQuery(Guid OwnerId) : IRequest<OwnerResponse>;
+public class GetOwnerByIdQuery : IRequest<OwnerResponse>
+{
+  public Guid OwnerId { get; init; }
+}

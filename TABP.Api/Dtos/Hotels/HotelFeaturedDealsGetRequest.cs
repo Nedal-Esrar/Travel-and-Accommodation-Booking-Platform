@@ -1,3 +1,6 @@
 ﻿namespace TABP.Api.Dtos.Hotels;
 
-public record HotelFeaturedDealsGetRequest(int Count);
+public class HotelFeaturedDealsGetRequest
+{
+  public int Count { get; init; }
+}

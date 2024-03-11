@@ -2,4 +2,7 @@
 
 namespace TABP.Application.Cities.GetTrending;
 
-public record GetTrendingCitiesQuery(int Count) : IRequest<IEnumerable<TrendingCityResponse>>;
+public class GetTrendingCitiesQuery : IRequest<IEnumerable<TrendingCityResponse>>
+{
+  public int Count { get; init; }
+}

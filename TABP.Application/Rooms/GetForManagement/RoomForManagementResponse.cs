@@ -1,9 +1,11 @@
 ﻿namespace TABP.Application.Rooms.GetForManagement;
 
-public record RoomForManagementResponse(
-  Guid Id,
-  Guid RoomClassId,
-  string Number,
-  DateTime CreatedAtUtc,
-  DateTime? ModifiedAtUtc,
-  bool IsAvailable);
+public class RoomForManagementResponse
+{
+  public Guid Id { get; init; }
+  public Guid RoomClassId { get; init; }
+  public string Number { get; init; }
+  public DateTime CreatedAtUtc { get; init; }
+  public DateTime? ModifiedAtUtc { get; init; }
+  public bool IsAvailable { get; init; }
+}

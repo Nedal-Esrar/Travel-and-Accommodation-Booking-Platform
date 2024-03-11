@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 using TABP.Domain.Interfaces.Persistence;
@@ -8,7 +9,7 @@ public class UnitOfWork(HotelBookingDbContext context) : IUnitOfWork
 {
   public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
   {
-    await context.Database.BeginTransactionAsync(cancellationToken);
+    await context.Database.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
   }
 
   public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)

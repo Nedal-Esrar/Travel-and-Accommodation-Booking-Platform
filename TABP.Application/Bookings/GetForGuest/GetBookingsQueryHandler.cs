@@ -36,8 +36,8 @@ public class GetBookingsQueryHandler : IRequestHandler<GetBookingsQuery, Paginat
 
     var query = new PaginationQuery<Booking>(
       b => b.GuestId == request.GuestId,
-      SortOrder.Ascending,
-      null,
+      request.SortOrder ?? SortOrder.Ascending,
+      request.SortColumn,
       request.PageNumber,
       request.PageSize);
 

@@ -111,4 +111,16 @@ public static class SortingExpressions
       _ => r => r.Id
     };
   }
+
+  public static Expression<Func<Booking, object>> GetBookingSortExpression(string? sortColumn)
+  {
+    return sortColumn?.ToLower() switch
+    {
+      "id" => b => b.Id,
+      "bookingdate" => b => b.BookingDateUtc,
+      "checkindate" => b => b.CheckInDateUtc,
+      "checkoutdate" => b => b.CheckOutDateUtc,
+      _ => b => b.Id
+    };
+  }
 }

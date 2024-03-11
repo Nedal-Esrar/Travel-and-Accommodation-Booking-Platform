@@ -35,11 +35,11 @@ public class GetRoomClassesByHotelIdForGuestQueryHandler : IRequestHandler<GetRo
     var roomClasses = await _roomClassRepository.GetAsync(
       new PaginationQuery<RoomClass>(
         rc => rc.HotelId == request.HotelId,
-        SortOrder.Ascending,
-        null,
+        request.SortOrder ?? SortOrder.Ascending,
+        request.SortColumn,
         request.PageNumber,
         request.PageSize),
-      true,
+      includeGallery: true,
       cancellationToken);
 
     return _mapper.Map<PaginatedList<RoomClassForGuestResponse>>(roomClasses);

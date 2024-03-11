@@ -8,6 +8,7 @@ using TABP.Domain.Messages;
 using TABP.Domain.Models;
 using TABP.Infrastructure.Persistence.DbContexts;
 using TABP.Infrastructure.Persistence.Extensions;
+using TABP.Infrastructure.Persistence.Helpers;
 
 namespace TABP.Infrastructure.Persistence.Repositories;
 
@@ -82,7 +83,7 @@ public class BookingRepository(HotelBookingDbContext context) : IBookingReposito
   {
     var queryable = context.Bookings
       .Where(query.Filter)
-      .Sort(b => b.BookingDateUtc, query.SortOrder);
+      .Sort(SortingExpressions.GetBookingSortExpression(query.SortColumn), query.SortOrder);
 
     var itemsToReturn = await queryable
       .GetPage(query.PageNumber, query.PageSize)

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using TABP.Api.Dtos.Amenities;
 using TABP.Api.Validators.Common;
+using static TABP.Domain.Constants.Common;
 
 namespace TABP.Api.Validators.Amenities;
 
@@ -9,6 +10,9 @@ public class AmenitiesGetRequestValidator : AbstractValidator<AmenitiesGetReques
   public AmenitiesGetRequestValidator()
   {
     Include(new ResourcesQueryRequestValidator());
+    
+    RuleFor(x => x.SearchTerm)
+      .MaximumLength(ShortTextMaxLength);
 
     RuleFor(x => x.SortColumn)
       .Must(BeAValidSortColumn)

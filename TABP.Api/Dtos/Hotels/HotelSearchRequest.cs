@@ -6,6 +6,7 @@ namespace TABP.Api.Dtos.Hotels;
 /// <param name="SortColumn">Should be empty, 'id', 'name', 'starRating', 'price', or 'ReviewsRating'.</param>
 public class HotelSearchRequest : ResourcesQueryRequest
 {
+  public string? SearchTerm { get; init; }  
   public DateOnly CheckInDateUtc { get; init; }
   public DateOnly CheckOutDateUtc { get; init; }
   public int NumberOfAdults { get; init; }

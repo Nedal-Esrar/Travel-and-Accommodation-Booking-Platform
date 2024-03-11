@@ -8,9 +8,6 @@ public class ResourcesQueryRequestValidator : AbstractValidator<ResourcesQueryRe
 {
   public ResourcesQueryRequestValidator()
   {
-    RuleFor(x => x.SearchTerm)
-      .MaximumLength(ShortTextMaxLength);
-
     RuleFor(x => x.SortOrder)
       .Must(BeAValidSortOrder)
       .WithMessage(CommonValidationMessages.SortOrderNotValid);

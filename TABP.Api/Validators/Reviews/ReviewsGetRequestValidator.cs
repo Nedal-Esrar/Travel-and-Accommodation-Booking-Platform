@@ -9,7 +9,7 @@ public class ReviewsGetRequestValidator : AbstractValidator<ReviewsGetRequest>
   public ReviewsGetRequestValidator()
   {
     Include(new ResourcesQueryRequestValidator());
-
+    
     RuleFor(x => x.SortColumn)
       .Must(BeAValidSortColumn)
       .WithMessage(ReviewValidationMessages.SortColumnNotValid);

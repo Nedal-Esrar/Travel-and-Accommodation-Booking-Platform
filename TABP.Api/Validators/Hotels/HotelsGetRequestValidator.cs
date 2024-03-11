@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using TABP.Api.Dtos.Hotels;
 using TABP.Api.Validators.Common;
+using static TABP.Domain.Constants.Common;
 
 namespace TABP.Api.Validators.Hotels;
 
@@ -9,6 +10,9 @@ public class HotelsGetRequestValidator : AbstractValidator<HotelsGetRequest>
   public HotelsGetRequestValidator()
   {
     Include(new ResourcesQueryRequestValidator());
+    
+    RuleFor(x => x.SearchTerm)
+      .MaximumLength(ShortTextMaxLength);
 
     RuleFor(x => x.SortColumn)
       .Must(BeAValidSortColumn)

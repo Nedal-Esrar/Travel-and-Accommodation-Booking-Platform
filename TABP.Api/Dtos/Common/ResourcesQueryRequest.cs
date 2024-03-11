@@ -8,8 +8,6 @@ public class ResourcesQueryRequest
 
   private int _pageSize = 10;
 
-  public string? SearchTerm { get; init; }
-
   /// <summary>
   ///   Should be empty, 'asc', or 'desc'
   /// </summary>

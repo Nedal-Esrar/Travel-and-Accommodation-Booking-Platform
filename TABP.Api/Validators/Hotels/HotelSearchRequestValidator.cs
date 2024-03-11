@@ -12,6 +12,9 @@ public class HotelSearchRequestValidator : AbstractValidator<HotelSearchRequest>
   public HotelSearchRequestValidator()
   {
     Include(new ResourcesQueryRequestValidator());
+    
+    RuleFor(x => x.SearchTerm)
+      .MaximumLength(ShortTextMaxLength);
 
     RuleFor(x => x.CheckInDateUtc)
       .NotEmpty()

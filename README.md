@@ -191,8 +191,7 @@ This API provides a range of endpoints designed for the management of various ho
 - **Data Encryption**: Password hashing using `Microsoft.AspNet.Identity.IPasswordHasher`.
 
 ## API Versioning
-This API leverages the Asp.Versioning.Mvc library to implement a streamlined header-based versioning mechanism. This approach facilitates seamless client access to different API versions without requiring adjustments to the base URL or path. By utilizing headers, the versioning process is standardized and offers improved clarity and maintainability. This method also enhances flexibility and ease of integration for users while ensuring optimal compatibility with various client applications.
-This API uses Asp.Versioning.Mvc for header-based versioning, allowing seamless access to different versions without changing the URL. It standardizes versioning via headers, improving clarity and flexibility for users and compatibility with client apps.
+This API leverages the `Asp.Versioning.Mvc` library to implement a streamlined header-based versioning mechanism. This approach facilitates seamless client access to different API versions without requiring adjustments to the base URL or path. By utilizing headers, the versioning process is standardized, offering improved clarity and maintainability. This method also enhances flexibility and ease of integration for users while ensuring optimal compatibility with various client applications.
 
 Users can effortlessly specify their preferred API version by including the x-api-version header in their requests. In instances where no version is explicitly specified, the API seamlessly defaults to the latest available version. For instance:
 
@@ -231,7 +230,7 @@ git clone https://github.com/Nedal-Esrar/Travel-and-Accommodation-Booking-Platfo
 Change your current directory to the root directory of your ASP.NET API project:
 
 ```bash
-cd Travel-and-Accommodation-Booking-Platform/TABP.Api
+cd Travel-and-Accommodation-Booking-Platform/src/TABP.Api
 ```
 
 #### 3. Configure `appsettings.json`

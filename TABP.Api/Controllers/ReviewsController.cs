@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Api.Dtos.Reviews;
+using TABP.Api.Extensions;
 using TABP.Application.Reviews.Common;
 using TABP.Application.Reviews.Create;
 using TABP.Application.Reviews.Delete;
@@ -48,8 +49,7 @@ public class ReviewsController(ISender mediator, IMapper mapper) : ControllerBas
 
     var reviews = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      reviews.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(reviews.PaginationMetadata);
 
     return Ok(reviews.Items);
   }

@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Api.Dtos.Rooms;
+using TABP.Api.Extensions;
 using TABP.Application.Rooms.Create;
 using TABP.Application.Rooms.Delete;
 using TABP.Application.Rooms.GetByRoomClassIdForGuest;
@@ -49,8 +50,7 @@ public class RoomsController(ISender mediator, IMapper mapper) : ControllerBase
 
     var rooms = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      rooms.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(rooms.PaginationMetadata);
 
     return Ok(rooms.Items);
   }
@@ -80,8 +80,7 @@ public class RoomsController(ISender mediator, IMapper mapper) : ControllerBase
 
     var rooms = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      rooms.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(rooms.PaginationMetadata);
 
     return Ok(rooms.Items);
   }

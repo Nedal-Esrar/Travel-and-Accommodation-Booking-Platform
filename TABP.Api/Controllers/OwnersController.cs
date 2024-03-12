@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Api.Dtos.Owners;
+using TABP.Api.Extensions;
 using TABP.Application.Owners.Common;
 using TABP.Application.Owners.Create;
 using TABP.Application.Owners.Get;
@@ -44,8 +45,7 @@ public class OwnersController(ISender mediator, IMapper mapper) : ControllerBase
 
     var owners = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      owners.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(owners.PaginationMetadata);
 
     return Ok(owners.Items);
   }

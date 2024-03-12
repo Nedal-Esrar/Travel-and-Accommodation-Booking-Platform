@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Api.Dtos.Images;
 using TABP.Api.Dtos.RoomClasses;
+using TABP.Api.Extensions;
 using TABP.Application.RoomClasses.AddImageToGallery;
 using TABP.Application.RoomClasses.Create;
 using TABP.Application.RoomClasses.Delete;
 using TABP.Application.RoomClasses.GetForManagement;
 using TABP.Application.RoomClasses.Update;
 using TABP.Domain;
-using TABP.Domain.Enums;
 
 namespace TABP.Api.Controllers;
 
@@ -45,8 +45,7 @@ public class RoomClassesController(ISender mediator, IMapper mapper) : Controlle
 
     var roomClasses = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      roomClasses.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(roomClasses.PaginationMetadata);
 
     return Ok(roomClasses.Items);
   }

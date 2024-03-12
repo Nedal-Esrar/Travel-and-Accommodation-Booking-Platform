@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using TABP.Api.Dtos.Hotels;
 using TABP.Api.Dtos.Images;
 using TABP.Api.Dtos.RoomClasses;
+using TABP.Api.Extensions;
 using TABP.Application.Hotels.AddToGallery;
 using TABP.Application.Hotels.Create;
 using TABP.Application.Hotels.Delete;
@@ -48,8 +49,7 @@ public class HotelsController(ISender mediator, IMapper mapper) : ControllerBase
 
     var hotels = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      hotels.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(hotels.PaginationMetadata);
 
     return Ok(hotels.Items);
   }
@@ -74,8 +74,7 @@ public class HotelsController(ISender mediator, IMapper mapper) : ControllerBase
 
     var hotels = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      hotels.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(hotels.PaginationMetadata);
 
     return Ok(hotels.Items);
   }
@@ -148,8 +147,7 @@ public class HotelsController(ISender mediator, IMapper mapper) : ControllerBase
 
     var roomClasses = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      roomClasses.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(roomClasses.PaginationMetadata);
 
     return Ok(roomClasses.Items);
   }

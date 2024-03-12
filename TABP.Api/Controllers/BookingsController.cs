@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Api.Dtos.Bookings;
+using TABP.Api.Extensions;
 using TABP.Application.Bookings.Common;
 using TABP.Application.Bookings.Create;
 using TABP.Application.Bookings.Delete;
@@ -187,7 +188,7 @@ public class BookingsController(ISender mediator, IMapper mapper) : ControllerBa
 
     var bookings = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(bookings.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(bookings.PaginationMetadata);
 
     return Ok(bookings.Items);
   }

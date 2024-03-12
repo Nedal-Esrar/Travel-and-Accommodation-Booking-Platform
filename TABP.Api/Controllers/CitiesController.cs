@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Api.Dtos.Cities;
 using TABP.Api.Dtos.Images;
+using TABP.Api.Extensions;
 using TABP.Application.Cities.Create;
 using TABP.Application.Cities.Delete;
 using TABP.Application.Cities.GetForManagement;
@@ -44,12 +45,11 @@ public class CitiesController(ISender mediator, IMapper mapper) : ControllerBase
   {
     var query = mapper.Map<GetCitiesForManagementQuery>(citiesGetRequest);
 
-    var owners = await mediator.Send(query, cancellationToken);
+    var cities = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      owners.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(cities.PaginationMetadata);
 
-    return Ok(owners.Items);
+    return Ok(cities.Items);
   }
 
   /// <summary>

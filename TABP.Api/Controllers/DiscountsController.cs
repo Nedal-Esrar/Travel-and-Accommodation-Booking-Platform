@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Api.Dtos.Discounts;
+using TABP.Api.Extensions;
 using TABP.Application.Discounts.Create;
 using TABP.Application.Discounts.Delete;
 using TABP.Application.Discounts.Get;
@@ -44,8 +45,7 @@ public class DiscountsController(ISender mediator, IMapper mapper) : ControllerB
 
     var discounts = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      discounts.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(discounts.PaginationMetadata);
 
     return Ok(discounts.Items);
   }

@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TABP.Api.Dtos.Amenities;
+using TABP.Api.Extensions;
 using TABP.Application.Amenities.Common;
 using TABP.Application.Amenities.Create;
 using TABP.Application.Amenities.Get;
@@ -39,8 +40,7 @@ public class AmenitiesController(ISender mediator, IMapper mapper) : ControllerB
 
     var amenities = await mediator.Send(query, cancellationToken);
 
-    Response.Headers["x-pagination"] = JsonSerializer.Serialize(
-      amenities.PaginationMetadata);
+    Response.Headers.AddPaginationMetadata(amenities.PaginationMetadata);
 
     return Ok(amenities.Items);
   }

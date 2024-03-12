@@ -23,9 +23,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TABP.Application\TABP.Application.csproj" />
-      <ProjectReference Include="..\TABP.Domain\TABP.Domain.csproj" />
-      <ProjectReference Include="..\TABP.Infrastructure\TABP.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\src\TABP.Application\TABP.Application.csproj" />
+      <ProjectReference Include="..\..\src\TABP.Domain\TABP.Domain.csproj" />
+      <ProjectReference Include="..\..\src\TABP.Infrastructure\TABP.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

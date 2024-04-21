@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using FluentValidation;
 
-namespace TABP.Infrastructure.Common.OptionsValidation;
+namespace TABP.Infrastructure.Common;
 
 public static class ValidationExtensions
 {

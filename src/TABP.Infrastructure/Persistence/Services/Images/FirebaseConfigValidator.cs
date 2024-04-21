@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TABP.Infrastructure.Common.OptionsValidation;
+using TABP.Infrastructure.Common;
 
 namespace TABP.Infrastructure.Persistence.Services.Images;
 

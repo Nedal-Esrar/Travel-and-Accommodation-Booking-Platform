@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace TABP.Infrastructure.Common.OptionsValidation;
+namespace TABP.Shared.OptionsValidation;
 
 public static class OptionsBuilderExtensions
 {

@@ -1,15 +1,13 @@
 ﻿using FluentValidation;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TABP.Domain.Interfaces.Persistence.Services;
-using TABP.Infrastructure.Common.OptionsValidation;
+using TABP.Shared.OptionsValidation;
 
 namespace TABP.Infrastructure.Persistence.Services.Images;
 
 public static class ImageServiceConfiguration
 {
-  public static IServiceCollection AddImageService(this IServiceCollection services, 
-    IConfiguration configuration)
+  public static IServiceCollection AddImageService(this IServiceCollection services)
   {
     services.AddScoped<IValidator<FirebaseConfig>, FireBaseConfigValidator>();
 

@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using TABP.Api.Filters;
 using TABP.Api.Middlewares;
+using TABP.Api.RateLimiting;
 
 namespace TABP.Api;
 
@@ -112,24 +113,6 @@ public static class WebConfiguration
     services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
     services.AddFluentValidationAutoValidation();
-
-    return services;
-  }
-
-  private static IServiceCollection AddRateLimiting(this IServiceCollection services)
-  {
-    services.AddRateLimiter(options =>
-    {
-      options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-
-      options.AddFixedWindowLimiter("FixedWindow", limiterOptions =>
-      {
-        limiterOptions.PermitLimit = 10;
-        limiterOptions.Window = TimeSpan.FromSeconds(2);
-        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        limiterOptions.QueueLimit = 5;
-      });
-    });
 
     return services;
   }

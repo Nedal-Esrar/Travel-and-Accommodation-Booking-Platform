@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TABP.Domain.Interfaces.Persistence;
 using TABP.Domain.Interfaces.Persistence.Repositories;
-using TABP.Domain.Interfaces.Persistence.Services;
 using TABP.Infrastructure.Persistence.DbContexts;
 using TABP.Infrastructure.Persistence.Repositories;
 using TABP.Infrastructure.Persistence.Services.Images;
@@ -22,7 +21,7 @@ public static class PersistenceConfiguration
     services.AddDbContext(configuration)
       .AddPasswordHashing()
       .AddRepositories()
-      .AddImageService(configuration);
+      .AddImageService();
     
     return services;
   }

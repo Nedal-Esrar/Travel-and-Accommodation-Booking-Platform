@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TABP.Application\TABP.Application.csproj" />
+      <ProjectReference Include="..\TABP.Shared\TABP.Shared.csproj" />
     </ItemGroup>
 
 </Project>

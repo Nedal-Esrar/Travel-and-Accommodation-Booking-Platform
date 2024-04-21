@@ -2,14 +2,13 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TABP.Domain.Interfaces.Services;
-using TABP.Infrastructure.Common.OptionsValidation;
+using TABP.Shared.OptionsValidation;
 
 namespace TABP.Infrastructure.Services.Email;
 
 public static class EmailConfiguration
 {
-  public static IServiceCollection AddEmailInfrastructure(this IServiceCollection services,
-    IConfiguration configuration)
+  public static IServiceCollection AddEmailInfrastructure(this IServiceCollection services)
   {
     services.AddScoped<IValidator<EmailConfig>, EmailConfigValidator>();
 
@@ -18,7 +17,7 @@ public static class EmailConfiguration
       .ValidateFluentValidation()
       .ValidateOnStart();
 
-    services.AddScoped<IEmailService, EmailService>();
+    services.AddTransient<IEmailService, EmailService>();
 
     return services;
   }

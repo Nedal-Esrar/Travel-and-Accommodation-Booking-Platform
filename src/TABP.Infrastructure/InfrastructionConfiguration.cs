@@ -16,10 +16,10 @@ public static class DependencyInjection
     IConfiguration config)
   {
     services.AddPersistenceInfrastructure(config)
-      .AddAuthInfrastructure(config)
-      .AddEmailInfrastructure(config)
+      .AddAuthInfrastructure()
+      .AddEmailInfrastructure()
       .AddPdfInfrastructure()
-      .AddScoped<IDateTimeProvider, DateTimeProvider>();
+      .AddTransient<IDateTimeProvider, DateTimeProvider>();
 
     return services;
   }

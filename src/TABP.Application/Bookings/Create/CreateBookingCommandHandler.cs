@@ -143,7 +143,12 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
         throw new RoomsNotInHotelException(RoomMessages.NotInSameHotel);
       }
 
-      if (!await _roomRepository.IsAvailableAsync(roomId, checkInDate, checkOutDate, cancellationToken))
+      if (!await _roomRepository.ExistsAsync(
+            r => r.Id == roomId &&
+                 r.Bookings.All(
+                   b => checkInDate >= b.CheckOutDateUtc || 
+                        checkOutDate <= b.CheckInDateUtc), 
+            cancellationToken))
       {
         throw new RoomNotAvailableException(RoomMessages.NotAvailable(roomId));
       }

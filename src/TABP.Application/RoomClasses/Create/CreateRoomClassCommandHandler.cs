@@ -34,19 +34,21 @@ public class CreateRoomClassCommandHandler : IRequestHandler<CreateRoomClassComm
     CreateRoomClassCommand request,
     CancellationToken cancellationToken)
   {
-    if (!await _hotelRepository.ExistsByIdAsync(request.HotelId, cancellationToken))
+    if (!await _hotelRepository.ExistsAsync(h => h.Id == request.HotelId, cancellationToken))
     {
       throw new NotFoundException(HotelMessages.NotFound);
     }
 
-    if (await _roomClassRepository.ExistsByNameInHotelAsync(request.HotelId, request.Name, cancellationToken))
+    if (await _roomClassRepository.ExistsAsync(
+          rc => rc.HotelId == request.HotelId && rc.Name == request.Name, 
+          cancellationToken))
     {
       throw new RoomClassWithSameNameFoundException(RoomClassMessages.NameInHotelFound);
     }
 
     foreach (var amenityId in request.AmenitiesIds)
     {
-      if (!await _amenityRepository.ExistsByIdAsync(amenityId, cancellationToken))
+      if (!await _amenityRepository.ExistsAsync(a => a.Id == amenityId, cancellationToken))
       {
         throw new NotFoundException(AmenityMessages.WithIdNotFound);
       }

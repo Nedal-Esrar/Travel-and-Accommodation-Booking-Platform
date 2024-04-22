@@ -28,7 +28,7 @@ public class CreateCityCommandHandler : IRequestHandler<CreateCityCommand, CityR
     CreateCityCommand request,
     CancellationToken cancellationToken = default)
   {
-    if (await _cityRepository.ExistsByPostOfficeAsync(request.PostOffice, cancellationToken))
+    if (await _cityRepository.ExistsAsync(c => c.PostOffice == request.PostOffice, cancellationToken))
     {
       throw new CityWithPostOfficeExistsException(CityMessages.PostOfficeExists);
     }

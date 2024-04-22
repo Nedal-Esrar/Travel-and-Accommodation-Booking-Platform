@@ -29,7 +29,9 @@ public class GetRoomsByRoomClassIdForGuestsQueryHandler :
     GetRoomsByRoomClassIdForGuestsQuery request,
     CancellationToken cancellationToken = default)
   {
-    if (!await _roomClassRepository.ExistsByIdAsync(request.RoomClassId, cancellationToken))
+    if (!await _roomClassRepository.ExistsAsync(
+          rc => rc.Id == request.RoomClassId, 
+          cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.NotFound);
     }

@@ -24,12 +24,12 @@ public class DeleteCityCommandHandler : IRequestHandler<DeleteCityCommand>
 
   public async Task Handle(DeleteCityCommand request, CancellationToken cancellationToken)
   {
-    if (!await _cityRepository.ExistsByIdAsync(request.CityId, cancellationToken))
+    if (!await _cityRepository.ExistsAsync(c => c.Id == request.CityId, cancellationToken))
     {
       throw new NotFoundException(CityMessages.NotFound);
     }
 
-    if (await _hotelRepository.ExistsByCityIdAsync(request.CityId, cancellationToken))
+    if (await _hotelRepository.ExistsAsync(h => h.CityId == request.CityId, cancellationToken))
     {
       throw new DependentsExistException(CityMessages.DependentsExist);
     }

@@ -30,7 +30,9 @@ public class GetRoomsHandler : IRequestHandler<GetRoomsForManagementQuery, Pagin
   public async Task<PaginatedList<RoomForManagementResponse>> Handle(GetRoomsForManagementQuery request,
     CancellationToken cancellationToken)
   {
-    if (!await _roomClassRepository.ExistsByIdAsync(request.RoomClassId, cancellationToken))
+    if (!await _roomClassRepository.ExistsAsync(
+          rc => rc.Id == request.RoomClassId,
+          cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.NotFound);
     }

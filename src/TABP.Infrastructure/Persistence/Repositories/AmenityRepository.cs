@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Interfaces.Persistence.Repositories;
@@ -19,18 +20,10 @@ public class AmenityRepository(HotelBookingDbContext context) : IAmenityReposito
       .FindAsync([id], cancellationToken);
   }
 
-  public async Task<bool> ExistsByIdAsync(Guid id,
-    CancellationToken cancellationToken = default)
+  public async Task<bool> ExistsAsync(Expression<Func<Amenity, bool>> predicate, 
+                                      CancellationToken cancellationToken = default)
   {
-    return await context.Amenities.AnyAsync(
-      a => a.Id == id, cancellationToken);
-  }
-
-  public async Task<bool> ExistsByNameAsync(string name,
-    CancellationToken cancellationToken = default)
-  {
-    return await context.Amenities.AnyAsync(
-      a => a.Name == name, cancellationToken);
+    return await context.Amenities.AnyAsync(predicate, cancellationToken);
   }
 
   public async Task<Amenity> CreateAsync(Amenity amenity,

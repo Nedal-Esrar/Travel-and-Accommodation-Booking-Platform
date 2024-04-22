@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Interfaces.Persistence.Repositories;
@@ -12,6 +13,11 @@ namespace TABP.Infrastructure.Persistence.Repositories;
 
 public class ReviewRepository(HotelBookingDbContext context) : IReviewRepository
 {
+  public async Task<bool> ExistsAsync(Expression<Func<Review, bool>> predicate,
+                                      CancellationToken cancellationToken = default)
+  {
+    return await context.Reviews.AnyAsync(predicate, cancellationToken);
+  }
   public async Task<PaginatedList<Review>> GetAsync(PaginationQuery<Review> query, 
     CancellationToken cancellationToken = default)
   {
@@ -69,13 +75,6 @@ public class ReviewRepository(HotelBookingDbContext context) : IReviewRepository
       ?? new Review { Id = reviewId };
 
     context.Reviews.Remove(entity);
-  }
-
-  public async Task<bool> ExistsByGuestAndHotelIds(
-    Guid guestId, Guid hotelId, CancellationToken cancellationToken = default)
-  {
-    return await context.Reviews.AnyAsync(
-      r => r.HotelId == hotelId && r.GuestId == guestId, cancellationToken);
   }
 
   public async Task<int> GetTotalRatingForHotelAsync(

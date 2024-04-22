@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using TABP.Domain.Entities;
 using TABP.Domain.Models;
 
@@ -9,9 +10,7 @@ public interface IAmenityRepository
 
   Task<Amenity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-  Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken = default);
-
-  Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken = default);
+  Task<bool> ExistsAsync(Expression<Func<Amenity, bool>> predicate, CancellationToken cancellationToken = default);
 
   Task<Amenity> CreateAsync(Amenity amenity, CancellationToken cancellationToken = default);
 

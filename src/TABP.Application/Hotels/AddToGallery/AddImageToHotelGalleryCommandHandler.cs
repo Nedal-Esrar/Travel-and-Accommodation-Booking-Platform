@@ -26,7 +26,7 @@ public class AddImageToHotelGalleryCommandHandler : IRequestHandler<AddImageToHo
   public async Task Handle(AddImageToHotelGalleryCommand request,
     CancellationToken cancellationToken = default)
   {
-    if (!await _hotelRepository.ExistsByIdAsync(request.HotelId, cancellationToken))
+    if (!await _hotelRepository.ExistsAsync(h => h.Id == request.HotelId, cancellationToken))
     {
       throw new NotFoundException(HotelMessages.NotFound);
     }

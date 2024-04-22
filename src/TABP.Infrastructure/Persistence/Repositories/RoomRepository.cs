@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Interfaces.Persistence.Repositories;
@@ -12,6 +13,12 @@ namespace TABP.Infrastructure.Persistence.Repositories;
 
 public class RoomRepository(HotelBookingDbContext context) : IRoomRepository
 {
+  public async Task<bool> ExistsAsync(Expression<Func<Room, bool>> predicate,
+                                      CancellationToken cancellationToken = default)
+  {
+    return await context.Rooms.AnyAsync(predicate, cancellationToken);
+  }
+  
   public async Task<PaginatedList<RoomForManagement>> GetForManagementAsync(
     PaginationQuery<Room> query,
     CancellationToken cancellationToken = default)
@@ -84,26 +91,6 @@ public class RoomRepository(HotelBookingDbContext context) : IRoomRepository
     context.Rooms.Remove(roomEntity);
   }
 
-  public async Task<bool> ExistsByRoomClassIdAsync(Guid roomClassId, 
-    CancellationToken cancellationToken = default)
-  {
-    return await context.Rooms.AnyAsync(r => r.RoomClassId == roomClassId, cancellationToken);
-  }
-
-  public async Task<bool> ExistsByIdAndRoomClassIdAsync(Guid roomClassId, Guid id,
-    CancellationToken cancellationToken = default)
-  {
-    return await context.Rooms.AnyAsync(
-      r => r.Id == id && r.RoomClassId == roomClassId, cancellationToken);
-  }
-
-  public async Task<bool> ExistsByNumberInRoomClassAsync(string number, Guid roomClassId,
-    CancellationToken cancellationToken = default)
-  {
-    return await context.Rooms.AnyAsync(
-      r => r.RoomClassId == roomClassId && r.Number == number, cancellationToken);
-  }
-
   public async Task<PaginatedList<Room>> GetAsync(PaginationQuery<Room> query, CancellationToken cancellationToken = default)
   {
     var queryable = context.Rooms
@@ -130,22 +117,6 @@ public class RoomRepository(HotelBookingDbContext context) : IRoomRepository
       .Include(r => r.RoomClass)
       .ThenInclude(rc => rc.Discounts.Where(d => d.StartDateUtc <= currentDateTime && d.EndDateUtc > currentDateTime))
       .FirstOrDefaultAsync(r => r.Id == roomId, cancellationToken);
-  }
-
-  public async Task<bool> IsAvailableAsync(Guid id,
-    DateOnly checkInDate, DateOnly checkOutDate,
-    CancellationToken cancellationToken = default)
-  {
-    if (!await context.Rooms.AnyAsync(r => r.Id == id, cancellationToken))
-    {
-      throw new NotFoundException(RoomMessages.NotFound);
-    }
-    
-    return await context.Rooms
-      .Where(r => r.Id == id)
-      .AllAsync(r => r.Bookings
-          .All(b => checkInDate >= b.CheckOutDateUtc || checkOutDate <= b.CheckInDateUtc),
-        cancellationToken: cancellationToken);
   }
 }
 

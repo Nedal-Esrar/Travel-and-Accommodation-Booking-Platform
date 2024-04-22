@@ -29,7 +29,7 @@ public class CreateAmenityCommandHandler : IRequestHandler<CreateAmenityCommand,
     CreateAmenityCommand request,
     CancellationToken cancellationToken = default)
   {
-    if (await _amenityRepository.ExistsByNameAsync(request.Name, cancellationToken))
+    if (await _amenityRepository.ExistsAsync(a => a.Name == request.Name, cancellationToken))
     {
       throw new AmenityExistsException(AmenityMessages.WithNameExists);
     }

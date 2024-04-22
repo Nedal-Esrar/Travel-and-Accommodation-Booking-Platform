@@ -36,14 +36,13 @@ public class CreateDiscountCommandHandler : IRequestHandler<CreateDiscountComman
     CreateDiscountCommand request,
     CancellationToken cancellationToken)
   {
-    if (!await _roomClassRepository.ExistsByIdAsync(request.RoomClassId, cancellationToken))
+    if (!await _roomClassRepository.ExistsAsync(rc => rc.Id == request.RoomClassId, cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.NotFound);
     }
 
-    if (await _discountRepository.ExistsInTimeIntervalAsync(
-          request.StartDateUtc,
-          request.EndDateUtc,
+    if (await _discountRepository.ExistsAsync(
+          d => request.EndDateUtc >= d.StartDateUtc && request.StartDateUtc <= d.EndDateUtc,
           cancellationToken))
     {
       throw new DiscountIntervalsConflictException(DiscountMessages.InDateIntervalExists);

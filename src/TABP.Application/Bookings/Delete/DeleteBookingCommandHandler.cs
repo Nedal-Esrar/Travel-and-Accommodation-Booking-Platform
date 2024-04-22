@@ -29,7 +29,9 @@ public class DeleteBookingCommandHandler : IRequestHandler<DeleteBookingCommand>
       throw new NotFoundException(UserMessages.NotFound);
     }
 
-    if (!await _bookingRepository.ExistsByIdAndGuestIdAsync(request.BookingId, request.GuestId, cancellationToken))
+    if (!await _bookingRepository.ExistsAsync(
+          b => b.Id == request.BookingId && b.GuestId == request.GuestId,
+          cancellationToken))
     {
       throw new NotFoundException(BookingMessages.NotFoundForGuest);
     }

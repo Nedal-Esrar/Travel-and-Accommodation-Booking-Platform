@@ -28,12 +28,17 @@ public class UpdateRoomCommandHandler : IRequestHandler<UpdateRoomCommand>
 
   public async Task Handle(UpdateRoomCommand request, CancellationToken cancellationToken)
   {
-    if (!await _roomClassRepository.ExistsByIdAsync(request.RoomClassId, cancellationToken))
+    if (!await _roomClassRepository.ExistsAsync(
+          rc => rc.Id == request.RoomClassId, 
+          cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.NotFound);
     }
 
-    if (await _roomRepository.ExistsByNumberInRoomClassAsync(request.Number, request.RoomClassId, cancellationToken))
+    if (await _roomRepository.ExistsAsync(
+          r => r.RoomClassId == request.RoomClassId &&
+               r.Number == request.Number, 
+          cancellationToken))
     {
       throw new RoomWithNumberExistsInRoomClassException(RoomClassMessages.DuplicatedRoomNumber);
     }

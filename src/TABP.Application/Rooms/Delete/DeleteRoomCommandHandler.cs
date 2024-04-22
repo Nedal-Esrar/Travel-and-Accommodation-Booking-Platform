@@ -27,17 +27,21 @@ public class DeleteRoomCommandHandler : IRequestHandler<DeleteRoomCommand>
 
   public async Task Handle(DeleteRoomCommand request, CancellationToken cancellationToken)
   {
-    if (!await _roomClassRepository.ExistsByIdAsync(request.RoomClassId, cancellationToken))
+    if (!await _roomClassRepository.ExistsAsync(
+          rc => rc.Id == request.RoomClassId, 
+          cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.NotFound);
     }
 
-    if (!await _roomRepository.ExistsByIdAndRoomClassIdAsync(request.RoomClassId, request.RoomId, cancellationToken))
+    if (!await _roomRepository.ExistsAsync(
+          r => r.Id == request.RoomId && r.RoomClassId == request.RoomClassId, 
+          cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.RoomNotFound);
     }
 
-    if (await _bookingRepository.ExistsByRoomIdAsync(request.RoomId, cancellationToken))
+    if (await _bookingRepository.ExistsAsync(b => b.Rooms.Any(r => r.Id == request.RoomId), cancellationToken))
     {
       throw new DependentsExistException(RoomMessages.DependentsExist);
     }

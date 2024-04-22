@@ -26,7 +26,7 @@ public class AddImageToRoomClassGalleryCommandHandler : IRequestHandler<AddImage
   public async Task Handle(AddImageToRoomClassGalleryCommand request,
     CancellationToken cancellationToken = default)
   {
-    if (!await _roomClassRepository.ExistsByIdAsync(request.RoomClassId, cancellationToken))
+    if (!await _roomClassRepository.ExistsAsync(rc => rc.Id == request.RoomClassId, cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.NotFound);
     }

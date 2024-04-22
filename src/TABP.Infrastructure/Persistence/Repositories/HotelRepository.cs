@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 using TABP.Domain.Enums;
@@ -13,6 +14,12 @@ namespace TABP.Infrastructure.Persistence.Repositories;
 
 public class HotelRepository(HotelBookingDbContext context) : IHotelRepository
 {
+  public async Task<bool> ExistsAsync(Expression<Func<Hotel, bool>> predicate,
+                                      CancellationToken cancellationToken = default)
+  {
+    return await context.Hotels.AnyAsync(predicate, cancellationToken);
+  }
+  
   public async Task<PaginatedList<HotelForManagement>> GetForManagementAsync(
     PaginationQuery<Hotel> query,
     CancellationToken cancellationToken = default)
@@ -79,11 +86,6 @@ public class HotelRepository(HotelBookingDbContext context) : IHotelRepository
     return hotel;
   }
 
-  public async Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken = default)
-  {
-    return await context.Hotels.AnyAsync(h => h.Id == id, cancellationToken);
-  }
-
   public async Task<Hotel> CreateAsync(Hotel hotel, CancellationToken cancellationToken = default)
   {
     var createdHotel = await context.Hotels.AddAsync(hotel, cancellationToken);
@@ -111,18 +113,6 @@ public class HotelRepository(HotelBookingDbContext context) : IHotelRepository
                      ?? new Hotel { Id = id };
 
     context.Hotels.Remove(hotelEntity);
-  }
-
-  public async Task<bool> ExistsByCityIdAsync(Guid cityId, CancellationToken cancellationToken)
-  {
-    return await context.Hotels.AnyAsync(h => h.CityId == cityId, cancellationToken);
-  }
-
-  public async Task<bool> ExistsByLocation(double longitude, double latitude)
-  {
-    return await context.Hotels
-      .AnyAsync(h => h.Longitude == longitude
-                     && h.Latitude == latitude);
   }
 
   public async Task<PaginatedList<HotelSearchResult>> GetForSearchAsync(PaginationQuery<Hotel> query, CancellationToken cancellationToken = default)

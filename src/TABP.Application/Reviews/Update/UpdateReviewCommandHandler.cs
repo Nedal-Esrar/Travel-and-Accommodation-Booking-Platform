@@ -31,7 +31,7 @@ public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand>
 
   public async Task Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
   {
-    if (!await _hotelRepository.ExistsByIdAsync(request.HotelId, cancellationToken))
+    if (!await _hotelRepository.ExistsAsync(h => h.Id == request.HotelId, cancellationToken))
     {
       throw new NotFoundException(HotelMessages.NotFound);
     }

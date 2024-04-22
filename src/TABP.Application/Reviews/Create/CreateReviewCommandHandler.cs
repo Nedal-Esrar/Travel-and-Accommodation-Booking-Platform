@@ -37,7 +37,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
   public async Task<ReviewResponse> Handle(CreateReviewCommand request,
     CancellationToken cancellationToken = default)
   {
-    if (!await _hotelRepository.ExistsByIdAsync(request.HotelId, cancellationToken))
+    if (!await _hotelRepository.ExistsAsync(h => h.Id == request.HotelId, cancellationToken))
     {
       throw new NotFoundException(HotelMessages.NotFound);
     }
@@ -47,12 +47,16 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
       throw new NotFoundException(UserMessages.NotFound);
     }
 
-    if (await _bookingRepository.ExistsForHotelAndGuestAsync(request.HotelId, request.GuestId, cancellationToken))
+    if (await _bookingRepository.ExistsAsync(
+          b => b.HotelId == request.HotelId && b.GuestId == request.GuestId, 
+          cancellationToken))
     {
       throw new GuestDidNotBookHotelException(BookingMessages.NoBookingForGuestInHotel);
     }
 
-    if (await _reviewRepository.ExistsByGuestAndHotelIds(request.GuestId, request.HotelId, cancellationToken))
+    if (await _reviewRepository.ExistsAsync(
+          r => r.GuestId == request.GuestId && r.HotelId == request.HotelId, 
+          cancellationToken))
     {
       throw new ReviewAlreadyExistsException(ReviewMessages.GuestAlreadyReviewedHotel);
     }

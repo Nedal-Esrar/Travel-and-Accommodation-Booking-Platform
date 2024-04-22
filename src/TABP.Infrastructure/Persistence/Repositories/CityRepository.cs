@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using LinqToDB.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
@@ -14,6 +15,11 @@ namespace TABP.Infrastructure.Persistence.Repositories;
 
 public class CityRepository(HotelBookingDbContext context) : ICityRepository
 {
+  public async Task<bool> ExistsAsync(Expression<Func<City, bool>> predicate,
+                                      CancellationToken cancellationToken = default)
+  {
+    return await context.Cities.AnyAsync(predicate, cancellationToken);
+  }
   public async Task<PaginatedList<CityForManagement>> GetForManagementAsync(
     PaginationQuery<City> query,
     CancellationToken cancellationToken = default)
@@ -50,12 +56,6 @@ public class CityRepository(HotelBookingDbContext context) : ICityRepository
       .FindAsync([id], cancellationToken);
   }
 
-  public async Task<bool> ExistsByIdAsync(Guid id,
-    CancellationToken cancellationToken = default)
-  {
-    return await context.Cities.AnyAsync(c => c.Id == id, cancellationToken);
-  }
-
   public async Task<City> CreateAsync(City city,
     CancellationToken cancellationToken = default)
   {
@@ -90,13 +90,6 @@ public class CityRepository(HotelBookingDbContext context) : ICityRepository
       throw new NotFoundException(CityMessages.NotFound);
 
     context.Cities.Update(city);
-  }
-
-  public async Task<bool> ExistsByPostOfficeAsync(string postOffice,
-    CancellationToken cancellationToken = default)
-  {
-    return await context.Cities.AnyAsync(
-      c => c.PostOffice == postOffice, cancellationToken);
   }
 
   public async Task<IEnumerable<City>> GetMostVisitedAsync(int count,

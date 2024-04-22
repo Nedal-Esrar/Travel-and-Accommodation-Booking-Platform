@@ -9,6 +9,8 @@ using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using TABP.Api.Filters;
 using TABP.Api.Middlewares;
 using TABP.Api.RateLimiting;
+using TABP.Api.Services;
+using TABP.Domain.Interfaces.Services;
 
 namespace TABP.Api;
 
@@ -17,6 +19,10 @@ public static class WebConfiguration
   public static IServiceCollection AddWebComponents(
     this IServiceCollection services)
   {
+    services.AddHttpContextAccessor();
+
+    services.AddScoped<IUserContext, UserContext>();
+    
     services.AddEndpointsApiExplorer()
       .AddSwagger();
 

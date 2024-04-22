@@ -197,13 +197,13 @@ Users can effortlessly specify their preferred API version by including the x-ap
 
 To explicitly request version 1.0:
 ```bash
-curl -X GET "localhost:5116/api/cities" -H "x-api-version: 1.0"
+curl -X GET "localhost:8080/api/cities" -H "x-api-version: 1.0"
 ```
 
 
 To utilize the latest version by default:
 ```bash
-curl -X GET "localhost:5116/api/cities"
+curl -X GET "localhost:8080/api/cities"
 ```
 
 ## Setup Guide
@@ -253,9 +253,9 @@ Start the ASP.NET API project using the following command:
 dotnet run
 ```
 
-The API will be accessable using https://localhost:7169.
+The API will be accessable using http://localhost:8080.
 
-The swagger UI will open automatically where you can try and explore the endpoints or you can open it using https://localhost:7169/swagger.
+The swagger UI will open automatically where you can try and explore the endpoints or you can open it using http://localhost:8080/swagger.
 
 ##### To access admin's functionalities, authenticate with these credentials:
 - **Email:** admin@hotelbooking.com

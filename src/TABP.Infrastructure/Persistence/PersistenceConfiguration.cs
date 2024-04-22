@@ -74,7 +74,9 @@ public static class PersistenceConfiguration
     
     using var context = scope.ServiceProvider.GetRequiredService<HotelBookingDbContext>();
     
-    context.Database.Migrate();
+    if (context.Database.GetPendingMigrations().Any()) {
+      context.Database.Migrate();
+    }
     
     return app;
   }

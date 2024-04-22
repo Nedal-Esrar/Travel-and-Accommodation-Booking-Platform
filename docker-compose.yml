@@ -1,0 +1,36 @@
+﻿services:
+  tabp.api:
+    image: tabp.api
+    build:
+      context: .
+      dockerfile: src/TABP.Api/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on: 
+      - "sqlserver"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - JwtAuthConfig__Key=39b27208-d07d-4086-8379-506e338f7844
+      - JwtAuthConfig__Issuer=http://tabp.api:8080
+      - JwtAuthConfig__Audience=http://tabp.api:8080
+      - EmailConfig__Username=hotelbookingfts@gmail.com
+      - EmailConfig__Password=alay vgia souv gpez
+      - FirebaseConfig__CredentialsJson={"type":"service_account","project_id":"hotelbookingfts-c3555","private_key_id":"89da1535fc67d1504a263c849a4237f94ea0ee6a","private_key":"-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDocAwYmpj9qSGn\nSlS9/zM3eGAOxMYTinNx3NOuOpFaSwdyjMBSnv6zSY5LtJXHH3XxKnxvSzEebL+6\nHHMlk3Yyxr9P9wygBe+GHqxLi/fFsJKR5zhn8tnmibsD0A3+x2P2NQ2/skXax+Xv\nuQiUghTQRfj5LMLL0KRaIPBkkyOJJYsev8eoQ9mPmklt/7tdPEIN7jMQHD8TgFIR\nfcG760Nb/k/PKiQY2/gFsunRumh2T5hOkNrLiSgopVNpjIvGinQXQVe1JUFD1Dsc\ngbLEe8fG8RRNoOiC3L405oIQT5NI1f5pDUbATa1a3LUgK0Gk1BBbybDE5WsATtn/\nJOPaWdVRAgMBAAECggEASlaLh9Lp2zacbMR5FcrotnTpQ8/rCZTeFyxpBu/0TMxy\nNVCOsd3n169OsyeuP2Dwd5D++xkxPGnLZ9pxeTMQOm0WAp0gjI1Zbauhrwe01qUC\nO2eXwqcIyZKDHVUNJM7gSX3uR8DcVnxYLbMf618vCO1YE1kdc9HmvmyKdaAZXWLo\nb7DXtjAVkVre5Ifh2m9w05R3MytgP3MGztB4nl9WnRJ9ddg4qIElYszxFS6GmlaT\nfM1/OjCNRsIw2Ab+fG0Bi238LoPwPKjrhoqIvpxDM2kLexbtyO6T8EudL2no03UO\n4P8aPrLFLrdvugbbD7xOlWSAPlaf9VZW2EQ2neibgQKBgQD3OWC6+7rN8dPBR/xK\na9iUFFHZdog9F+7HAy0MGmNd+kSxwPwpiMARt/ZT7OpWOe2K5ApjVQManGJ+aiSP\ncWlwm1TQtqzWf+HKB9jf3pbIeCEUIHPe8dE18IH4LFKlkT/UCRuj5I6qhx9qfhaJ\nwclfjy04CP64wSWXqtwyDq/EJwKBgQDwsEyW8gJz8/NHqtDx5EfK3DuuUaHXP7rl\nUUFgPyMxo6pxAcx7h/oeJUGed2Hn6rtixfg/3q9kB5PWobRQtk7EQqvyIHjSuLI+\neToHjLjPbxpGFhZCoYE2mG3BD0jYpNokojdDhTYrdM6B60hxQoMW+6tzOkEARMBd\ngnahvsatxwKBgGH/EoLL6d5cr218FVuCqFT6QP+MZrCg3ftxHNghVaYY4EX9k3b7\nR/c+Dpxx2unXCHv3rM53EkXoG3q0pE1fzUXfrJ0W7CgShPPKbINA/k/0nlgWDRgg\njqds8HfpSdFrY/uuqJAstwiNizxxQonUkPgaDviZSC8AEOCvz5zgCXgdAoGBAJxy\njCYlgtCqBj1UW+KPdtb2llh1uVP3md1LFsqf35l5f+VavPai6UJFB0Ug5mPgIRNQ\nCVBCyBCmGEOP8mvwRHyvtaJ51u9pnHqdQ8n6f3peBl7+JlQDNMEvDVBLRheD+EON\nqYxa/1352+146SqtiBYdWlFY0T2CcuOVVNVH806rAoGAQUKRxbOCc5lLqS6wILqm\nD6y7ASRH+p1JBcQ/j5VWim/+aONbasO4Uernpcq99QvpixQCtgMpMZu+71xv96yH\nAs5L5WDKQ85KhEYRua0eaVZeOxb8AuXOVuXJ04Fu36pPJqaaNqm2+CTs+NTMYmWl\neWNVPKqZbTTKOJ2u75tdRuo=\n-----END PRIVATE KEY-----\n","client_email":"firebase-adminsdk-790zx@hotelbookingfts-c3555.iam.gserviceaccount.com","client_id":"109771856259203498760","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_x509_cert_url":"https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-790zx%40hotelbookingfts-c3555.iam.gserviceaccount.com","universe_domain":"googleapis.com"}
+      - FirebaseConfig__Bucket=hotelbookingfts-c3555.appspot.com
+      - ConnectionStrings__SqlServer=Server=sqlserver;Database=TABP;User Id=sa;Password=11aaAA@@;TrustServerCertificate=True;
+    volumes:
+      - ./logs:/logs
+  
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    ports:
+      - "1433:1433"
+    restart: always
+    environment:
+      - ACCEPT_EULA=y
+      - SA_PASSWORD=11aaAA@@
+    volumes:
+      - sql_data:/var/opt/mssql
+
+volumes:
+  sql_data:

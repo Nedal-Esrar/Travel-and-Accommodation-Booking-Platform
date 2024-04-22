@@ -32,8 +32,8 @@ public class UpdateAmenityCommandHandler : IRequestHandler<UpdateAmenityCommand>
                           cancellationToken) ??
                         throw new NotFoundException(AmenityMessages.WithIdNotFound);
 
-    if (!await _amenityRepository.ExistsByNameAsync(
-          request.Name,
+    if (!await _amenityRepository.ExistsAsync(
+          a => a.Name == request.Name,
           cancellationToken))
     {
       throw new AmenityExistsException(AmenityMessages.WithNameExists);

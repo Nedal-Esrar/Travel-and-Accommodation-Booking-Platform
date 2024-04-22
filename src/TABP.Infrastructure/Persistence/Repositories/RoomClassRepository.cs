@@ -1,4 +1,5 @@
-﻿using LinqToDB.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using LinqToDB.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 using TABP.Domain.Enums;
@@ -14,16 +15,16 @@ namespace TABP.Infrastructure.Persistence.Repositories;
 
 public class RoomClassRepository(HotelBookingDbContext context) : IRoomClassRepository
 {
+  public async Task<bool> ExistsAsync(Expression<Func<RoomClass, bool>> predicate,
+                                      CancellationToken cancellationToken = default)
+  {
+    return await context.RoomClasses.AnyAsync(predicate, cancellationToken);
+  }
+  
   public async Task<RoomClass?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
   {
     return await context.RoomClasses
       .FirstOrDefaultAsync(rc => rc.Id == id, cancellationToken);
-  }
-
-  public async Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken = default)
-  {
-    return await context.RoomClasses
-      .AnyAsync(rc => rc.Id == id, cancellationToken);
   }
 
   public async Task<RoomClass> CreateAsync(RoomClass roomClass, CancellationToken cancellationToken = default)
@@ -39,7 +40,7 @@ public class RoomClassRepository(HotelBookingDbContext context) : IRoomClassRepo
   {
     ArgumentNullException.ThrowIfNull(roomClass);
 
-    if (!await ExistsByIdAsync(roomClass.Id, cancellationToken))
+    if (!await ExistsAsync(rc => rc.Id == roomClass.Id, cancellationToken))
       throw new NotFoundException(RoomClassMessages.NotFound);
 
     context.RoomClasses.Update(roomClass);
@@ -57,12 +58,6 @@ public class RoomClassRepository(HotelBookingDbContext context) : IRoomClassRepo
                  ?? new RoomClass { Id = id };
 
     context.RoomClasses.Remove(entity);
-  }
-
-  public Task<bool> ExistsByHotelIdAsync(Guid hotelId, CancellationToken cancellationToken = default)
-  {
-    return context.RoomClasses
-      .AnyAsync(rc => rc.HotelId == hotelId, cancellationToken);
   }
 
   public async Task<PaginatedList<RoomClass>> GetAsync(
@@ -112,12 +107,6 @@ public class RoomClassRepository(HotelBookingDbContext context) : IRoomClassRepo
       await queryable.GetPaginationMetadataAsync(
         query.PageNumber,
         query.PageSize));
-  }
-
-  public Task<bool> ExistsByNameInHotelAsync(Guid hotelId, string name, CancellationToken cancellationToken = default)
-  {
-    return context.RoomClasses
-      .AnyAsync(rc => rc.HotelId == hotelId && rc.Name == name, cancellationToken);
   }
 
   public async Task<IEnumerable<RoomClass>> GetFeaturedDealsInDifferentHotelsAsync(int count,

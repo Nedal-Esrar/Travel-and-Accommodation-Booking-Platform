@@ -34,7 +34,10 @@ public class UpdateRoomClassHandler : IRequestHandler<UpdateRoomClassCommand>
       throw new NotFoundException(RoomClassMessages.NotFound);
     }
 
-    if (await _roomClassRepository.ExistsByNameInHotelAsync(roomClassEntity.HotelId, request.Name, cancellationToken))
+    if (await _roomClassRepository.ExistsAsync(
+          rc => rc.HotelId == roomClassEntity.HotelId &&
+                rc.Name == request.Name,
+          cancellationToken))
     {
       throw new RoomClassWithSameNameFoundException(RoomClassMessages.NameInHotelFound);
     }

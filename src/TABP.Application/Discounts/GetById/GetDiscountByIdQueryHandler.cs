@@ -26,7 +26,7 @@ public class GetDiscountByIdQueryHandler : IRequestHandler<GetDiscountByIdQuery,
     GetDiscountByIdQuery request,
     CancellationToken cancellationToken)
   {
-    if (!await _roomClassRepository.ExistsByIdAsync(request.RoomClassId, cancellationToken))
+    if (!await _roomClassRepository.ExistsAsync(rc => rc.Id == request.RoomClassId, cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.NotFound);
     }

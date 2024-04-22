@@ -1,4 +1,5 @@
-﻿using LinqToDB.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using LinqToDB.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 using TABP.Domain.Enums;
@@ -14,17 +15,10 @@ namespace TABP.Infrastructure.Persistence.Repositories;
 
 public class BookingRepository(HotelBookingDbContext context) : IBookingRepository
 {
-  public async Task<bool> ExistsByRoomIdAsync(Guid roomId, CancellationToken cancellationToken = default)
+  public async Task<bool> ExistsAsync(Expression<Func<Booking, bool>> predicate,
+                                      CancellationToken cancellationToken = default)
   {
-    return await context.Bookings
-      .AnyAsync(b => b.Rooms.Any(r => r.Id == roomId), cancellationToken);
-  }
-
-  public async Task<bool> ExistsForHotelAndGuestAsync(Guid hotelId, Guid guestId,
-    CancellationToken cancellationToken)
-  {
-    return await context.Bookings
-      .AnyAsync(b => b.GuestId == guestId && b.HotelId == hotelId, cancellationToken);
+    return await context.Bookings.AnyAsync(predicate, cancellationToken);
   }
 
   public async Task<Booking> CreateAsync(Booking booking, CancellationToken cancellationToken = default)
@@ -34,13 +28,6 @@ public class BookingRepository(HotelBookingDbContext context) : IBookingReposito
     var createdBooking = await context.AddAsync(booking, cancellationToken);
 
     return createdBooking.Entity;
-  }
-
-  public async Task<bool> ExistsByIdAndGuestIdAsync(Guid id, Guid guestId,
-    CancellationToken cancellationToken = default)
-  {
-    return await context.Bookings
-      .AnyAsync(b => b.Id == id && b.GuestId == guestId, cancellationToken);
   }
 
   public async Task<Booking?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)

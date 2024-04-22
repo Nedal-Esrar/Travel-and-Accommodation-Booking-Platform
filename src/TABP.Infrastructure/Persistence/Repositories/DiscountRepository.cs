@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Interfaces.Persistence.Repositories;
@@ -12,6 +13,11 @@ namespace TABP.Infrastructure.Persistence.Repositories;
 
 public class DiscountRepository(HotelBookingDbContext context) : IDiscountRepository
 {
+  public async Task<bool> ExistsAsync(Expression<Func<Discount, bool>> predicate,
+                                      CancellationToken cancellationToken = default)
+  {
+    return await context.Discounts.AnyAsync(predicate, cancellationToken);
+  }
   public Task<Discount?> GetByIdAsync(
     Guid roomClassId, Guid id,
     CancellationToken cancellationToken = default)
@@ -19,15 +25,6 @@ public class DiscountRepository(HotelBookingDbContext context) : IDiscountReposi
     return context.Discounts
       .FirstOrDefaultAsync(d => d.Id == id && d.RoomClassId == roomClassId,
         cancellationToken);
-  }
-
-  public async Task<bool> ExistsInTimeIntervalAsync(
-    DateTime startDate, DateTime endDate,
-    CancellationToken cancellationToken = default)
-  {
-    return await context.Discounts.AnyAsync(
-      d => endDate >= d.StartDateUtc && startDate <= d.EndDateUtc,
-      cancellationToken);
   }
 
   public async Task<Discount> CreateAsync(
@@ -39,12 +36,6 @@ public class DiscountRepository(HotelBookingDbContext context) : IDiscountReposi
     var createdDiscount = await context.Discounts.AddAsync(discount, cancellationToken);
 
     return createdDiscount.Entity;
-  }
-
-  public async Task<bool> ExistsByIdAsync(Guid roomClassId, Guid id, CancellationToken cancellationToken = default)
-  {
-    return await context.Discounts.AnyAsync(
-      d => d.Id == id && d.RoomClassId == roomClassId, cancellationToken);
   }
 
   public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)

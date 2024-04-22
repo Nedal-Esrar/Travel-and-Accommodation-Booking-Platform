@@ -22,7 +22,7 @@ public class UpdateCityCommandHandler : IRequestHandler<UpdateCityCommand>
 
   public async Task Handle(UpdateCityCommand request, CancellationToken cancellationToken)
   {
-    if (await _cityRepository.ExistsByPostOfficeAsync(request.PostOffice, cancellationToken))
+    if (await _cityRepository.ExistsAsync(c => c.PostOffice == request.PostOffice, cancellationToken))
     {
       throw new CityWithPostOfficeExistsException(CityMessages.PostOfficeExists);
     }

@@ -24,14 +24,16 @@ public class DeleteDiscountCommandHandler : IRequestHandler<DeleteDiscountComman
 
   public async Task Handle(DeleteDiscountCommand request, CancellationToken cancellationToken)
   {
-    if (!await _roomClassRepository.ExistsByIdAsync(
-          request.RoomClassId,
+    if (!await _roomClassRepository.ExistsAsync(
+          rc => rc.Id == request.RoomClassId,
           cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.NotFound);
     }
 
-    if (!await _discountRepository.ExistsByIdAsync(request.RoomClassId, request.DiscountId, cancellationToken))
+    if (!await _discountRepository.ExistsAsync(
+          d => d.Id == request.DiscountId && d.RoomClassId == request.RoomClassId, 
+          cancellationToken))
     {
       throw new NotFoundException(DiscountMessages.NotFoundInRoomClass);
     }

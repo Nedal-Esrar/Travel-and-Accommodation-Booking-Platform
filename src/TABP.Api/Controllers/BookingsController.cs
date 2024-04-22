@@ -49,11 +49,7 @@ public class BookingsController(ISender mediator, IMapper mapper) : ControllerBa
     BookingCreationRequest bookingCreationRequest,
     CancellationToken cancellationToken)
   {
-    var guestId = Guid.Parse(
-      User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
-
-    var command = new CreateBookingCommand { GuestId = guestId };
-    mapper.Map(bookingCreationRequest, command);
+    var command = mapper.Map<CreateBookingCommand>(bookingCreationRequest);
 
     var createdBooking = await mediator.Send(command, cancellationToken);
 
@@ -80,14 +76,7 @@ public class BookingsController(ISender mediator, IMapper mapper) : ControllerBa
   [HttpDelete("{id:guid}")]
   public async Task<IActionResult> DeleteBooking(Guid id, CancellationToken cancellationToken)
   {
-    var guestId = Guid.Parse(
-      User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
-
-    var command = new DeleteBookingCommand
-    {
-      GuestId = guestId,
-      BookingId = id
-    };
+    var command = new DeleteBookingCommand { BookingId = id };
 
     await mediator.Send(command, cancellationToken);
 
@@ -113,14 +102,7 @@ public class BookingsController(ISender mediator, IMapper mapper) : ControllerBa
   [HttpGet("{id:guid}/invoice")]
   public async Task<FileResult> GetInvoiceAsPdf(Guid id, CancellationToken cancellationToken)
   {
-    var guestId = Guid.Parse(
-      User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
-
-    var query = new GetInvoiceAsPdfQuery
-    {
-      GuestId = guestId,
-      BookingId = id
-    };
+    var query = new GetInvoiceAsPdfQuery { BookingId = id };
 
     var pdf = await mediator.Send(query, cancellationToken);
 
@@ -147,14 +129,7 @@ public class BookingsController(ISender mediator, IMapper mapper) : ControllerBa
   public async Task<ActionResult<BookingResponse>> GetBooking(
     Guid id, CancellationToken cancellationToken)
   {
-    var guestId = Guid.Parse(
-      User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
-
-    var query = new GetBookingByIdQuery
-    {
-      GuestId = guestId,
-      BookingId = id
-    };
+    var query = new GetBookingByIdQuery { BookingId = id };
 
     var booking = await mediator.Send(query, cancellationToken);
 
@@ -180,11 +155,7 @@ public class BookingsController(ISender mediator, IMapper mapper) : ControllerBa
     [FromQuery] BookingsGetRequest bookingsGetRequest,
     CancellationToken cancellationToken)
   {
-    var guestId = Guid.Parse(
-      User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new ArgumentNullException());
-
-    var query = new GetBookingsQuery { GuestId = guestId };
-    mapper.Map(bookingsGetRequest, query);
+    var query = mapper.Map<GetBookingsQuery>(bookingsGetRequest);
 
     var bookings = await mediator.Send(query, cancellationToken);
 

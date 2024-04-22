@@ -26,7 +26,7 @@ public class SetCityThumbnailCommandHandler : IRequestHandler<SetCityThumbnailCo
   public async Task Handle(SetCityThumbnailCommand request,
     CancellationToken cancellationToken = default)
   {
-    if (!await _cityRepository.ExistsByIdAsync(request.CityId, cancellationToken))
+    if (!await _cityRepository.ExistsAsync(c => c.Id == request.CityId, cancellationToken))
     {
       throw new NotFoundException(CityMessages.NotFound);
     }

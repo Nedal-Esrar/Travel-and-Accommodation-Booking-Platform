@@ -108,15 +108,7 @@ public class ReviewsController(ISender mediator, IMapper mapper) : ControllerBas
     ReviewCreationRequest reviewCreationRequest,
     CancellationToken cancellationToken)
   {
-    var guestId = Guid.Parse(
-      User.FindFirstValue(ClaimTypes.NameIdentifier) ??
-      throw new ArgumentNullException());
-
-    var command = new CreateReviewCommand
-    {
-      GuestId = guestId, 
-      HotelId = hotelId
-    };
+    var command = new CreateReviewCommand { HotelId = hotelId };
     mapper.Map(reviewCreationRequest, command);
 
     var createdReview = await mediator.Send(command, cancellationToken);
@@ -149,16 +141,7 @@ public class ReviewsController(ISender mediator, IMapper mapper) : ControllerBas
     ReviewUpdateRequest reviewUpdateRequest,
     CancellationToken cancellationToken)
   {
-    var guestId = Guid.Parse(
-      User.FindFirstValue(ClaimTypes.NameIdentifier) ??
-      throw new ArgumentNullException());
-
-    var command = new UpdateReviewCommand
-    {
-      GuestId = guestId,
-      HotelId = hotelId,
-      ReviewId = id
-    };
+    var command = new UpdateReviewCommand { HotelId = hotelId, ReviewId = id };
     mapper.Map(reviewUpdateRequest, command);
 
     await mediator.Send(
@@ -189,16 +172,7 @@ public class ReviewsController(ISender mediator, IMapper mapper) : ControllerBas
     Guid hotelId, Guid id,
     CancellationToken cancellationToken)
   {
-    var guestId = Guid.Parse(
-      User.FindFirstValue(ClaimTypes.NameIdentifier)
-      ?? throw new ArgumentNullException());
-
-    var command = new DeleteReviewCommand
-    {
-      GuestId = guestId,
-      HotelId = hotelId,
-      ReviewId = id
-    };
+    var command = new DeleteReviewCommand { HotelId = hotelId, ReviewId = id };
 
     await mediator.Send(
       command,

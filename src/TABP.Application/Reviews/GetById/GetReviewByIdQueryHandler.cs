@@ -25,7 +25,7 @@ public class GetReviewByIdQueryHandler : IRequestHandler<GetReviewByIdQuery, Rev
 
   public async Task<ReviewResponse> Handle(GetReviewByIdQuery request, CancellationToken cancellationToken)
   {
-    if (!await _hotelRepository.ExistsByIdAsync(request.HotelId, cancellationToken))
+    if (!await _hotelRepository.ExistsAsync(h => h.Id == request.HotelId, cancellationToken))
     {
       throw new NotFoundException(HotelMessages.NotFound);
     }

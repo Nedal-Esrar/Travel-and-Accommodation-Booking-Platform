@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using TABP.Domain.Entities;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Interfaces.Persistence.Repositories;
@@ -12,6 +13,11 @@ namespace TABP.Infrastructure.Persistence.Repositories;
 
 public class OwnerRepository(HotelBookingDbContext context) : IOwnerRepository
 {
+  public async Task<bool> ExistsAsync(Expression<Func<Owner, bool>> predicate,
+                                      CancellationToken cancellationToken = default)
+  {
+    return await context.Owners.AnyAsync(predicate, cancellationToken);
+  }
   public async Task<PaginatedList<Owner>> GetAsync(
     PaginationQuery<Owner> query,
     CancellationToken cancellationToken)
@@ -38,11 +44,6 @@ public class OwnerRepository(HotelBookingDbContext context) : IOwnerRepository
   {
     return await context.Owners
       .FindAsync([id], cancellationToken);
-  }
-
-  public Task<bool> ExistsByIdAsync(Guid id, CancellationToken cancellationToken = default)
-  {
-    return context.Owners.AnyAsync(o => o.Id == id, cancellationToken);
   }
 
   public async Task<Owner> CreateAsync(

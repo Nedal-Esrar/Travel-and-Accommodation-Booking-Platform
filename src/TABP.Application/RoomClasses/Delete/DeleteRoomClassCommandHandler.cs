@@ -22,12 +22,12 @@ public class DeleteRoomClassCommandHandler : IRequestHandler<DeleteRoomClassComm
 
   public async Task Handle(DeleteRoomClassCommand request, CancellationToken cancellationToken)
   {
-    if (!await _roomClassRepository.ExistsByIdAsync(request.RoomClassId, cancellationToken))
+    if (!await _roomClassRepository.ExistsAsync(rc => rc.Id == request.RoomClassId, cancellationToken))
     {
       throw new NotFoundException(RoomClassMessages.NotFound);
     }
 
-    if (await _roomRepository.ExistsByRoomClassIdAsync(request.RoomClassId, cancellationToken))
+    if (await _roomRepository.ExistsAsync(r => r.RoomClassId == request.RoomClassId, cancellationToken))
     {
       throw new DependentsExistException(RoomClassMessages.DependentsExist);
     }

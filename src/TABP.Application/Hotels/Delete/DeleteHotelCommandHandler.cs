@@ -24,12 +24,12 @@ public class DeleteHotelCommandHandler : IRequestHandler<DeleteHotelCommand>
 
   public async Task Handle(DeleteHotelCommand request, CancellationToken cancellationToken = default)
   {
-    if (!await _hotelRepository.ExistsByIdAsync(request.HotelId, cancellationToken))
+    if (!await _hotelRepository.ExistsAsync(h => h.Id == request.HotelId, cancellationToken))
     {
       throw new NotFoundException(HotelMessages.NotFound);
     }
 
-    if (await _roomClassRepository.ExistsByHotelIdAsync(request.HotelId, cancellationToken))
+    if (await _roomClassRepository.ExistsAsync(rc => rc.HotelId == request.HotelId, cancellationToken))
     {
       throw new DependentsExistException(HotelMessages.DependentsExist);
     }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using TABP.Application.Bookings.Common;
+using TABP.Domain;
 using TABP.Domain.Entities;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Interfaces.Persistence;
@@ -23,6 +24,7 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
   private readonly IRoomRepository _roomRepository;
   private readonly IUnitOfWork _unitOfWork;
   private readonly IUserRepository _userRepository;
+  private readonly IUserContext _userContext;
 
   public CreateBookingCommandHandler(
     IHotelRepository hotelRepository,
@@ -31,9 +33,10 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
     IUnitOfWork unitOfWork,
     IBookingRepository bookingRepository,
     IEmailService emailService,
-    IUserRepository userRepository,
+    IUserContext userContext,
     IPdfService pdfService,
-    IDateTimeProvider dateTimeProvider)
+    IDateTimeProvider dateTimeProvider, 
+    IUserRepository userRepository)
   {
     _hotelRepository = hotelRepository;
     _roomRepository = roomRepository;
@@ -41,17 +44,25 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
     _unitOfWork = unitOfWork;
     _bookingRepository = bookingRepository;
     _emailService = emailService;
-    _userRepository = userRepository;
+    _userContext = userContext;
     _pdfService = pdfService;
     _dateTimeProvider = dateTimeProvider;
+    _userRepository = userRepository;
   }
 
   public async Task<BookingResponse> Handle(
     CreateBookingCommand request,
     CancellationToken cancellationToken = default)
   {
-    var guest = await _userRepository.GetByIdAsync(request.GuestId, cancellationToken)
-                ?? throw new NotFoundException(UserMessages.NotFound);
+    if (!await _userRepository.ExistsByIdAsync(_userContext.Id, cancellationToken))
+    {
+      throw new NotFoundException(UserMessages.NotFound);
+    }
+    
+    if (_userContext.Role != UserRoles.Guest)
+    {
+      throw new ForbiddenException(UserMessages.NotGuest);
+    }
 
     var hotel = await _hotelRepository.GetByIdAsync(
                   request.HotelId,
@@ -74,7 +85,7 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
       {
         Hotel = hotel,
         Rooms = rooms,
-        Guest = guest,
+        GuestId = _userContext.Id,
         CheckInDateUtc = request.CheckInDateUtc,
         CheckOutDateUtc = request.CheckOutDateUtc,
         TotalPrice = CalculateTotalPrice(rooms,
@@ -109,7 +120,7 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
 
       await _emailService.SendAsync(
         GetBookingEmailRequest(
-          guest.Email,
+          _userContext.Email,
           new[] { ("invoice.pdf", invoicePdf) }
         ), cancellationToken);
 

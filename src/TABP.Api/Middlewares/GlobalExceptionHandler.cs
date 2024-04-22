@@ -57,6 +57,7 @@ public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IE
         ConflictException => StatusCodes.Status409Conflict,
         UnauthorizedException => StatusCodes.Status401Unauthorized,
         BadRequestException => StatusCodes.Status400BadRequest,
+        ForbiddenException => StatusCodes.Status403Forbidden,
         _ => StatusCodes.Status500InternalServerError
       },
       customException.Title,

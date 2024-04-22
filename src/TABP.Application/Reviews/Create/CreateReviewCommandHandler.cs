@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using TABP.Application.Reviews.Common;
+using TABP.Domain;
 using TABP.Domain.Entities;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Interfaces.Persistence;
 using TABP.Domain.Interfaces.Persistence.Repositories;
+using TABP.Domain.Interfaces.Services;
 using TABP.Domain.Messages;
 
 namespace TABP.Application.Reviews.Create;
@@ -17,6 +19,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
   private readonly IReviewRepository _reviewRepository;
   private readonly IUnitOfWork _unitOfWork;
   private readonly IUserRepository _userRepository;
+  private readonly IUserContext _userContext;
 
   public CreateReviewCommandHandler(
     IHotelRepository hotelRepository,
@@ -24,7 +27,8 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
     IReviewRepository reviewRepository,
     IBookingRepository bookingRepository,
     IUnitOfWork unitOfWork,
-    IMapper mapper)
+    IMapper mapper, 
+    IUserContext userContext)
   {
     _hotelRepository = hotelRepository;
     _userRepository = userRepository;
@@ -32,6 +36,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
     _bookingRepository = bookingRepository;
     _unitOfWork = unitOfWork;
     _mapper = mapper;
+    _userContext = userContext;
   }
 
   public async Task<ReviewResponse> Handle(CreateReviewCommand request,
@@ -42,20 +47,25 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, R
       throw new NotFoundException(HotelMessages.NotFound);
     }
 
-    if (!await _userRepository.ExistsByIdAsync(request.GuestId, cancellationToken))
+    if (!await _userRepository.ExistsByIdAsync(_userContext.Id, cancellationToken))
     {
       throw new NotFoundException(UserMessages.NotFound);
     }
+    
+    if (_userContext.Role != UserRoles.Guest)
+    {
+      throw new ForbiddenException(UserMessages.NotGuest);
+    }
 
-    if (await _bookingRepository.ExistsAsync(
-          b => b.HotelId == request.HotelId && b.GuestId == request.GuestId, 
+    if (!await _bookingRepository.ExistsAsync(
+          b => b.HotelId == request.HotelId && b.GuestId == _userContext.Id, 
           cancellationToken))
     {
       throw new GuestDidNotBookHotelException(BookingMessages.NoBookingForGuestInHotel);
     }
 
     if (await _reviewRepository.ExistsAsync(
-          r => r.GuestId == request.GuestId && r.HotelId == request.HotelId, 
+          r => r.GuestId == _userContext.Id && r.HotelId == request.HotelId, 
           cancellationToken))
     {
       throw new ReviewAlreadyExistsException(ReviewMessages.GuestAlreadyReviewedHotel);

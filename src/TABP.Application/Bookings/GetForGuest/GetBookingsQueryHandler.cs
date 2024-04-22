@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
 using TABP.Application.Bookings.Common;
+using TABP.Domain;
 using TABP.Domain.Entities;
 using TABP.Domain.Enums;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Interfaces.Persistence.Repositories;
+using TABP.Domain.Interfaces.Services;
 using TABP.Domain.Messages;
 using TABP.Domain.Models;
 
@@ -15,27 +17,35 @@ public class GetBookingsQueryHandler : IRequestHandler<GetBookingsQuery, Paginat
   private readonly IBookingRepository _bookingRepository;
   private readonly IMapper _mapper;
   private readonly IUserRepository _userRepository;
+  private readonly IUserContext _userContext;
 
   public GetBookingsQueryHandler(
     IUserRepository userRepository,
     IBookingRepository bookingRepository,
-    IMapper mapper)
+    IMapper mapper,
+    IUserContext userContext)
   {
     _userRepository = userRepository;
     _bookingRepository = bookingRepository;
     _mapper = mapper;
+    _userContext = userContext;
   }
 
   public async Task<PaginatedList<BookingResponse>> Handle(GetBookingsQuery request,
     CancellationToken cancellationToken = default)
   {
-    if (!await _userRepository.ExistsByIdAsync(request.GuestId, cancellationToken))
+    if (!await _userRepository.ExistsByIdAsync(_userContext.Id, cancellationToken))
     {
       throw new NotFoundException(UserMessages.NotFound);
     }
+    
+    if (_userContext.Role != UserRoles.Guest)
+    {
+      throw new ForbiddenException(UserMessages.NotGuest);
+    }
 
     var query = new PaginationQuery<Booking>(
-      b => b.GuestId == request.GuestId,
+      b => b.GuestId == _userContext.Id,
       request.SortOrder ?? SortOrder.Ascending,
       request.SortColumn,
       request.PageNumber,

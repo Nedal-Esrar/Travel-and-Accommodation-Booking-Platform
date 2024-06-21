@@ -183,11 +183,9 @@ This API provides a range of endpoints designed for the management of various ho
 - **Repository Pattern**:  Implementing the repository pattern to abstract the data layer, enhancing application maintainability, testability, and cleanliness by decoupling data access logic from business logic.
 - **Options Pattern**: For efficient configuration management within the application.
 - **Unit of Work**: Manages transactions across multiple data operations, ensuring atomicity and data consistency within a single logical unit.
-- **CQRS (Command Query Responsibility Segregation)**: Separates read and write operations, optimizing flexibility and scalability by using specialized models for queries and commands.
 
 ### Security
 
-- **HTTPS**: Ensures secure communication over the network.
 - **Data Encryption**: Password hashing using `Microsoft.AspNet.Identity.IPasswordHasher`.
 
 ## API Versioning

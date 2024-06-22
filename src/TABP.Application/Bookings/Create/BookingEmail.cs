@@ -5,7 +5,7 @@ namespace TABP.Application.Bookings.Create;
 public static class BookingEmail
 {
   public static EmailRequest GetBookingEmailRequest(string toEmail,
-    IEnumerable<(string name, byte[] file)> attachments)
+    IEnumerable<Attachment> attachments)
   {
     return new EmailRequest(
       [toEmail],

@@ -8,6 +8,7 @@ using TABP.Domain.Interfaces.Persistence;
 using TABP.Domain.Interfaces.Persistence.Repositories;
 using TABP.Domain.Interfaces.Services;
 using TABP.Domain.Messages;
+using TABP.Domain.Models;
 using static TABP.Application.Bookings.Create.BookingEmail;
 using static TABP.Application.Bookings.Common.InvoiceDetailsGenerator;
 
@@ -118,10 +119,16 @@ public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand,
         GetInvoiceHtml(createdBooking),
         cancellationToken);
 
+      var invoiceAttachment = new Attachment(
+        "invoice.pdf",
+        invoicePdf,
+        "application",
+        "pdf");
+
       await _emailService.SendAsync(
         GetBookingEmailRequest(
           _userContext.Email,
-          new[] { ("invoice.pdf", invoicePdf) }
+           new[]{invoiceAttachment}
         ), cancellationToken);
 
       await _unitOfWork.CommitTransactionAsync(cancellationToken);

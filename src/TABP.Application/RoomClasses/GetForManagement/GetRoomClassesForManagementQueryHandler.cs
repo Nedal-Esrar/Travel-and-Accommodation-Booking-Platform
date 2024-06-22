@@ -23,7 +23,7 @@ public class GetRoomClassesForManagementQueryHandler : IRequestHandler<GetRoomCl
   public async Task<PaginatedList<RoomClassForManagementResponse>> Handle(GetRoomClassesForManagementQuery request,
     CancellationToken cancellationToken)
   {
-    var query = new PaginationQuery<RoomClass>(
+    var query = new Query<RoomClass>(
       GetSearchExpression(request.SearchTerm),
       request.SortOrder ?? SortOrder.Ascending,
       request.SortColumn,

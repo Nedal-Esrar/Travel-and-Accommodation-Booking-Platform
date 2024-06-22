@@ -33,7 +33,7 @@ public class GetRoomClassesByHotelIdForGuestQueryHandler : IRequestHandler<GetRo
     }
 
     var roomClasses = await _roomClassRepository.GetAsync(
-      new PaginationQuery<RoomClass>(
+      new Query<RoomClass>(
         rc => rc.HotelId == request.HotelId,
         request.SortOrder ?? SortOrder.Ascending,
         request.SortColumn,

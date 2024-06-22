@@ -5,5 +5,7 @@ namespace TABP.Domain.Models;
 
 public record Query<TEntity>(
   Expression<Func<TEntity, bool>> Filter,
+  SortOrder SortOrder,
   string? SortColumn,
-  SortOrder SortOrder);
+  int PageNumber,
+  int PageSize);

@@ -19,7 +19,7 @@ public class OwnerRepository(HotelBookingDbContext context) : IOwnerRepository
     return await context.Owners.AnyAsync(predicate, cancellationToken);
   }
   public async Task<PaginatedList<Owner>> GetAsync(
-    PaginationQuery<Owner> query,
+    Query<Owner> query,
     CancellationToken cancellationToken)
   {
     var queryable = context.Owners

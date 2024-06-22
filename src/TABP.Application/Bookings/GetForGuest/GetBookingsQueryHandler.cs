@@ -44,7 +44,7 @@ public class GetBookingsQueryHandler : IRequestHandler<GetBookingsQuery, Paginat
       throw new ForbiddenException(UserMessages.NotGuest);
     }
 
-    var query = new PaginationQuery<Booking>(
+    var query = new Query<Booking>(
       b => b.GuestId == _userContext.Id,
       request.SortOrder ?? SortOrder.Ascending,
       request.SortColumn,

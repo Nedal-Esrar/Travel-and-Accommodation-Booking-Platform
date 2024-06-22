@@ -8,7 +8,7 @@ public interface ICityRepository
 {
   Task<bool> ExistsAsync(Expression<Func<City, bool>> predicate,
                          CancellationToken cancellationToken = default);
-  Task<PaginatedList<CityForManagement>> GetForManagementAsync(PaginationQuery<City> query,
+  Task<PaginatedList<CityForManagement>> GetForManagementAsync(Query<City> query,
     CancellationToken cancellationToken = default);
 
   Task<City?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);

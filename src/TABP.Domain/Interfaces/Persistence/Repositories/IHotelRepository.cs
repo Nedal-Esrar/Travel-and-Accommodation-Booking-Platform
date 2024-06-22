@@ -9,7 +9,7 @@ public interface IHotelRepository
   Task<bool> ExistsAsync(Expression<Func<Hotel, bool>> predicate,
                          CancellationToken cancellationToken = default);
   
-  Task<PaginatedList<HotelForManagement>> GetForManagementAsync(PaginationQuery<Hotel> query,
+  Task<PaginatedList<HotelForManagement>> GetForManagementAsync(Query<Hotel> query,
     CancellationToken cancellationToken = default);
 
   Task<Hotel?> GetByIdAsync(Guid id, bool includeCity = false, bool includeThumbnail = false,
@@ -21,7 +21,7 @@ public interface IHotelRepository
 
   Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-  Task<PaginatedList<HotelSearchResult>> GetForSearchAsync(PaginationQuery<Hotel> query,
+  Task<PaginatedList<HotelSearchResult>> GetForSearchAsync(Query<Hotel> query,
     CancellationToken cancellationToken = default);
 
   Task UpdateReviewById(Guid id, double newRating, CancellationToken cancellationToken = default);

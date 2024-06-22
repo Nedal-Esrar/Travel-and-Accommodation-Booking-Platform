@@ -10,7 +10,7 @@ public interface IRoomRepository
                          CancellationToken cancellationToken = default);
   
   Task<PaginatedList<RoomForManagement>> GetForManagementAsync(
-    PaginationQuery<Room> query,
+    Query<Room> query,
     CancellationToken cancellationToken = default);
 
   Task<Room?> GetByIdAsync(Guid roomClassId, Guid id, CancellationToken cancellationToken = default);
@@ -21,7 +21,7 @@ public interface IRoomRepository
 
   Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-  Task<PaginatedList<Room>> GetAsync(PaginationQuery<Room> query, CancellationToken cancellationToken = default);
+  Task<PaginatedList<Room>> GetAsync(Query<Room> query, CancellationToken cancellationToken = default);
   
   Task<Room?> GetByIdWithRoomClassAsync(Guid roomId, CancellationToken cancellationToken = default);
 }

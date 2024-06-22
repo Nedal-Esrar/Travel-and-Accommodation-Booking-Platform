@@ -21,7 +21,7 @@ public class HotelRepository(HotelBookingDbContext context) : IHotelRepository
   }
   
   public async Task<PaginatedList<HotelForManagement>> GetForManagementAsync(
-    PaginationQuery<Hotel> query,
+    Query<Hotel> query,
     CancellationToken cancellationToken = default)
   {
     var queryable = context.Hotels
@@ -115,7 +115,7 @@ public class HotelRepository(HotelBookingDbContext context) : IHotelRepository
     context.Hotels.Remove(hotelEntity);
   }
 
-  public async Task<PaginatedList<HotelSearchResult>> GetForSearchAsync(PaginationQuery<Hotel> query, CancellationToken cancellationToken = default)
+  public async Task<PaginatedList<HotelSearchResult>> GetForSearchAsync(Query<Hotel> query, CancellationToken cancellationToken = default)
   {
     var queryable = context.Hotels
       .Where(query.Filter)

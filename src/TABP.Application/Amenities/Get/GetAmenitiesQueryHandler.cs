@@ -26,7 +26,7 @@ public class GetAmenitiesQueryHandler : IRequestHandler<GetAmenitiesQuery, Pagin
     GetAmenitiesQuery request,
     CancellationToken cancellationToken = default)
   {
-    var query = new PaginationQuery<Amenity>(
+    var query = new Query<Amenity>(
       GetSearchExpression(request.SearchTerm),
       request.SortOrder ?? SortOrder.Ascending,
       request.SortColumn,

@@ -53,7 +53,7 @@ public class DiscountRepository(HotelBookingDbContext context) : IDiscountReposi
   }
 
   public async Task<PaginatedList<Discount>> GetAsync(
-    PaginationQuery<Discount> query,
+    Query<Discount> query,
     CancellationToken cancellationToken = default)
   {
     var queryable = context.Discounts

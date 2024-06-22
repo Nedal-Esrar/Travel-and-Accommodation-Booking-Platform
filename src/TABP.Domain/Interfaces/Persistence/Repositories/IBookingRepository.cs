@@ -18,7 +18,7 @@ public interface IBookingRepository
   Task<Booking?> GetByIdAsync(Guid id, Guid guestId, bool includeInvoice = false,
     CancellationToken cancellationToken = default);
 
-  Task<PaginatedList<Booking>> GetAsync(PaginationQuery<Booking> query, CancellationToken cancellationToken = default);
+  Task<PaginatedList<Booking>> GetAsync(Query<Booking> query, CancellationToken cancellationToken = default);
 
   Task<IEnumerable<Booking>> GetRecentBookingsInDifferentHotelsByGuestId(Guid guestId, int count,
     CancellationToken cancellationToken = default);

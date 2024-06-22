@@ -20,7 +20,7 @@ public class RoomRepository(HotelBookingDbContext context) : IRoomRepository
   }
   
   public async Task<PaginatedList<RoomForManagement>> GetForManagementAsync(
-    PaginationQuery<Room> query,
+    Query<Room> query,
     CancellationToken cancellationToken = default)
   {
     var currentDateUtc = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -91,7 +91,7 @@ public class RoomRepository(HotelBookingDbContext context) : IRoomRepository
     context.Rooms.Remove(roomEntity);
   }
 
-  public async Task<PaginatedList<Room>> GetAsync(PaginationQuery<Room> query, CancellationToken cancellationToken = default)
+  public async Task<PaginatedList<Room>> GetAsync(Query<Room> query, CancellationToken cancellationToken = default)
   {
     var queryable = context.Rooms
       .Where(query.Filter)

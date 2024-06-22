@@ -17,7 +17,7 @@ public interface IRoomClassRepository
   Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
   Task<PaginatedList<RoomClass>> GetAsync(
-    PaginationQuery<RoomClass> query,
+    Query<RoomClass> query,
     bool includeGallery = false,
     CancellationToken cancellationToken = default);
 

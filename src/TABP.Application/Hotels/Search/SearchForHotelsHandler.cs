@@ -27,7 +27,7 @@ public class SearchForHotelsHandler : IRequestHandler<SearchForHotelsQuery, Pagi
     CancellationToken cancellationToken)
   {
     var searchResults = await _hotelRepository.GetForSearchAsync(
-      new PaginationQuery<Hotel>(
+      new Query<Hotel>(
         BuildSearchExpression(request),
         request.SortOrder ?? SortOrder.Ascending,
         request.SortColumn,

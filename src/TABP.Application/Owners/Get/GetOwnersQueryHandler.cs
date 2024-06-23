@@ -26,7 +26,7 @@ public class GetOwnersQueryHandler : IRequestHandler<GetOwnersQuery, PaginatedLi
     GetOwnersQuery request,
     CancellationToken cancellationToken)
   {
-    var query = new PaginationQuery<Owner>(
+    var query = new Query<Owner>(
       GetSearchExpression(request.SearchTerm),
       request.SortOrder ?? SortOrder.Ascending,
       request.SortColumn,

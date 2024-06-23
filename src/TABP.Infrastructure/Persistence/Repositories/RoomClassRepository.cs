@@ -61,7 +61,7 @@ public class RoomClassRepository(HotelBookingDbContext context) : IRoomClassRepo
   }
 
   public async Task<PaginatedList<RoomClass>> GetAsync(
-    PaginationQuery<RoomClass> query, 
+    Query<RoomClass> query, 
     bool includeGallery = false,
     CancellationToken cancellationToken = default)
   {

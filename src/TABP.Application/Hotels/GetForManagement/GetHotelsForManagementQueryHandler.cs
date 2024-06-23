@@ -24,7 +24,7 @@ public class GetHotelsForManagementQueryHandler : IRequestHandler<GetHotelsForMa
     GetHotelsForManagementQuery request,
     CancellationToken cancellationToken)
   {
-    var query = new PaginationQuery<Hotel>(
+    var query = new Query<Hotel>(
       GetSearchExpression(request.SearchTerm),
       request.SortOrder ?? SortOrder.Ascending,
       request.SortColumn,

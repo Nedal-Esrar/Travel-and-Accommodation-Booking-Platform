@@ -9,7 +9,7 @@ public interface IOwnerRepository
   Task<bool> ExistsAsync(Expression<Func<Owner, bool>> predicate,
                          CancellationToken cancellationToken = default);
   
-  Task<PaginatedList<Owner>> GetAsync(PaginationQuery<Owner> query, CancellationToken cancellationToken = default);
+  Task<PaginatedList<Owner>> GetAsync(Query<Owner> query, CancellationToken cancellationToken = default);
 
   Task<Owner?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 

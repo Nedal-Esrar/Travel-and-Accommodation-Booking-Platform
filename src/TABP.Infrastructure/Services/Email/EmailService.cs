@@ -35,7 +35,7 @@ public class EmailService : IEmailService
         _emailConfig.Username,
         _emailConfig.Password,
         cancellationToken);
-
+      
       await smtpClient.SendAsync(email, cancellationToken);
     }
     finally
@@ -59,7 +59,10 @@ public class EmailService : IEmailService
       TextBody = emailRequest.Body
     };
 
-    foreach (var (fileName, file) in emailRequest.Attachments) bodyBuilder.Attachments.Add(fileName, file);
+    foreach (var (fileName, file, mediaType, subMediaType) in emailRequest.Attachments)
+    {
+      bodyBuilder.Attachments.Add(fileName, file, new ContentType(mediaType, subMediaType));
+    }
 
     emailMessage.Body = bodyBuilder.ToMessageBody();
 

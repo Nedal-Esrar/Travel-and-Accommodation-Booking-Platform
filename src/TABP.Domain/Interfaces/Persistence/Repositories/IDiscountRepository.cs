@@ -14,6 +14,6 @@ public interface IDiscountRepository
   
   Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-  Task<PaginatedList<Discount>> GetAsync(PaginationQuery<Discount> query,
+  Task<PaginatedList<Discount>> GetAsync(Query<Discount> query,
     CancellationToken cancellationToken = default);
 }

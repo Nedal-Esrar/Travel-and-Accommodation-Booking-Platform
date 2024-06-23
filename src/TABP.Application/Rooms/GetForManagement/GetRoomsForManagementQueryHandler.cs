@@ -37,7 +37,7 @@ public class GetRoomsHandler : IRequestHandler<GetRoomsForManagementQuery, Pagin
       throw new NotFoundException(RoomClassMessages.NotFound);
     }
 
-    var query = new PaginationQuery<Room>(
+    var query = new Query<Room>(
       GetSearchExpression(request.SearchTerm)
         .And(r => r.RoomClassId == request.RoomClassId),
       request.SortOrder ?? SortOrder.Ascending,

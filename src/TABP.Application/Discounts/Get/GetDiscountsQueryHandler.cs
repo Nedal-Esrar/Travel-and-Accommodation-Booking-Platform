@@ -35,7 +35,7 @@ public class GetDiscountsQueryHandler : IRequestHandler<GetDiscountsQuery, Pagin
       throw new NotFoundException(RoomClassMessages.NotFound);
     }
 
-    var query = new PaginationQuery<Discount>(
+    var query = new Query<Discount>(
       d => d.RoomClassId == request.RoomClassId,
       request.SortOrder ?? SortOrder.Ascending,
       request.SortColumn,

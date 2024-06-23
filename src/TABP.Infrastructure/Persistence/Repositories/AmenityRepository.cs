@@ -50,7 +50,7 @@ public class AmenityRepository(HotelBookingDbContext context) : IAmenityReposito
   }
 
   public async Task<PaginatedList<Amenity>> GetAsync(
-    PaginationQuery<Amenity> query,
+    Query<Amenity> query,
     CancellationToken cancellationToken = default)
   {
     var queryable = context.Amenities

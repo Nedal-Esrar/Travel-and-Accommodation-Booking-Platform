@@ -18,7 +18,7 @@ public class ReviewRepository(HotelBookingDbContext context) : IReviewRepository
   {
     return await context.Reviews.AnyAsync(predicate, cancellationToken);
   }
-  public async Task<PaginatedList<Review>> GetAsync(PaginationQuery<Review> query, 
+  public async Task<PaginatedList<Review>> GetAsync(Query<Review> query, 
     CancellationToken cancellationToken = default)
   {
     var queryable = context.Reviews

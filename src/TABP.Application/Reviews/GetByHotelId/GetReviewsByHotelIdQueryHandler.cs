@@ -35,7 +35,7 @@ public class GetReviewsByHotelIdQueryHandler : IRequestHandler<GetReviewsByHotel
       throw new NotFoundException(HotelMessages.NotFound);
     }
 
-    var query = new PaginationQuery<Review>(
+    var query = new Query<Review>(
       r => r.HotelId == request.HotelId,
       request.SortOrder ?? SortOrder.Ascending,
       request.SortColumn,

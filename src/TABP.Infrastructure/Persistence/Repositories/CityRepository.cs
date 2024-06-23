@@ -21,7 +21,7 @@ public class CityRepository(HotelBookingDbContext context) : ICityRepository
     return await context.Cities.AnyAsync(predicate, cancellationToken);
   }
   public async Task<PaginatedList<CityForManagement>> GetForManagementAsync(
-    PaginationQuery<City> query,
+    Query<City> query,
     CancellationToken cancellationToken = default)
   {
     var queryable = context.Cities

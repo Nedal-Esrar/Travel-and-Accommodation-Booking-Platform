@@ -65,7 +65,7 @@ public class BookingRepository(HotelBookingDbContext context) : IBookingReposito
 
     context.Bookings.Remove(entity);
   }
-  public async Task<PaginatedList<Booking>> GetAsync(PaginationQuery<Booking> query,
+  public async Task<PaginatedList<Booking>> GetAsync(Query<Booking> query,
     CancellationToken cancellationToken = default)
   {
     var queryable = context.Bookings

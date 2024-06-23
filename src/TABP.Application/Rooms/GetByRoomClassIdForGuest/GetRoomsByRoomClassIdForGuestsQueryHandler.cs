@@ -36,7 +36,7 @@ public class GetRoomsByRoomClassIdForGuestsQueryHandler :
       throw new NotFoundException(RoomClassMessages.NotFound);
     }
 
-    var query = new PaginationQuery<Room>(
+    var query = new Query<Room>(
       r => r.RoomClassId == request.RoomClassId &&
            !r.Bookings.Any(b => request.CheckInDate >= b.CheckOutDateUtc
                                 || request.CheckOutDate <= b.CheckInDateUtc),

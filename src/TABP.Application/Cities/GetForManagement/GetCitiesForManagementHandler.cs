@@ -26,7 +26,7 @@ public class
     GetCitiesForManagementQuery request,
     CancellationToken cancellationToken)
   {
-    var query = new PaginationQuery<City>(
+    var query = new Query<City>(
       GetSearchExpression(request.SearchTerm),
       request.SortOrder ?? SortOrder.Ascending,
       request.SortColumn,

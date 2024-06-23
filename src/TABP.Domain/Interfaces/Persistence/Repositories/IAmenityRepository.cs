@@ -6,7 +6,7 @@ namespace TABP.Domain.Interfaces.Persistence.Repositories;
 
 public interface IAmenityRepository
 {
-  Task<PaginatedList<Amenity>> GetAsync(PaginationQuery<Amenity> query, CancellationToken cancellationToken = default);
+  Task<PaginatedList<Amenity>> GetAsync(Query<Amenity> query, CancellationToken cancellationToken = default);
 
   Task<Amenity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 

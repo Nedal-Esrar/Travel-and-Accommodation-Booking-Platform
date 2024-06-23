@@ -8,7 +8,7 @@ public interface IReviewRepository
 {
   Task<bool> ExistsAsync(Expression<Func<Review, bool>> predicate,
                          CancellationToken cancellationToken = default); 
-  public Task<PaginatedList<Review>> GetAsync(PaginationQuery<Review> query,
+  public Task<PaginatedList<Review>> GetAsync(Query<Review> query,
     CancellationToken cancellationToken = default);
 
   Task<Review?> GetByIdAsync(Guid hotelId, Guid reviewId, CancellationToken cancellationToken = default);
